@@ -7,11 +7,42 @@ receivers:
         endpoint: 0.0.0.0:4318
 
 processors:
+  memory_limiter:
+    check_interval: 2s
+    limit_mib: 512
+    spike_limit_mib: 128
+
   resource:
     attributes:
       - key: service.name
-        value: demo
+        value: traces-only1
         action: upsert
+      - key: deployment.environment
+        value: local
+        action: insert
+      - key: host.arch
+        action: delete
+      - key: host.id
+        action: delete
+      - key: process.command_args
+        action: delete
+      - key: process.executable.path
+        action: delete
+
+  attributes:
+    actions:
+      - key: http.user_agent
+        action: delete
+      - key: net.peer.ip
+        action: delete
+      - key: net.host.port
+        action: delete
+      - key: net.peer.port
+        action: delete
+
+  batch:
+    timeout: 5s
+    send_batch_size: 512
 
 exporters:
   debug:
@@ -26,5 +57,5 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [resource]
+      processors: [memory_limiter, resource, attributes, batch]
       exporters: [debug, otlp/jaeger]

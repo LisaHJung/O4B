@@ -15,7 +15,7 @@ processors:
   resource:
     attributes:
       - key: service.name
-        value: traces-only1
+        value: demo
         action: upsert
       - key: deployment.environment
         value: local

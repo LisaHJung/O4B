@@ -1,0 +1,30 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  resource:
+    attributes:
+      - key: service.name
+        value: demo
+        action: upsert
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  otlp/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [resource]
+      exporters: [debug, otlp/jaeger]

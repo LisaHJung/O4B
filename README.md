@@ -25,14 +25,11 @@ Docker runs the OTel collector and Jaeger side-by-side with our app, so we can c
 - `docker-compose.yaml` runs Jaeger and the OTel collector to collect, store, and visualize traces from the Roll the Dice app
 
 **Two project branches**
-- [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup) branch
-  - includes the initial set up of the Roll the Dice app that sends the traces to the OTel collector.
-  - The collector is configured to use the:
-      - `resource` processor to add the "demo" service name to the traces
-      - `debug` exporter to print the traces being received by the collector
-      - `otlp/jaeger` exporter to send the traces to Jaeger for storage and visualization. 
+- [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup) branch includes the initial set up of the Roll the Dice app, the OTel collector, and Docker that runs both the OTel collector and Jaeger. 
+  - This project is set up to generate traces and send traces to the OTel collector.
+  - The OTel collector is configured receive and export the traces to Jaeger for storage and visualization.
 - [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch includes the same set up except that:
-  - it includes the following processors (`memory_limiter`, `resource`, `attributes`, and `batch`) in the OTel collector configuration to further process the traces before they are sent to Jaeger
+  - additional processors were added to the OTel collector configuration to further process the traces before they are sent to Jaeger
 
 **Clone the project**
 ```
@@ -67,11 +64,15 @@ Take a look at the terminal that is running Docker which should be displaying th
 **Verify that traces are being sent to Jaeger using its UI**
 1. Go the following url (http://localhost:16686/) to access the Jaeger UI. 
 
-2. Select the service named "demo" (orange box) then click on the "Find Traces" button (blue arrow). 
-If you don't see it, try refreshing the roll the dice app page multiple times, then refreshing the Jaeger UI page.
+2. Click on the "Service" section (orange box) to view all the services that are sending traces to Jaeger.
 
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/4d5f876b-224a-418a-9093-04addd16c9bb" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
 
+In the OTel config, we set our service name to "demo".
+
+Select the service "demo" then click on the "Find Traces" button (blue arrow).
+
+If you don't see the service name "demo", try refreshing the Roll the Dice app page multiple times, then refreshing the Jaeger UI page.
 
 3. Click on one of the traces (orange box)
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />
@@ -84,29 +85,35 @@ If you don't see it, try refreshing the roll the dice app page multiple times, t
 
 **Pay attention to info highlighted in orange as we will be using the OTel processors to remove them in the next section.**
 
+**Tags section**
+
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cfd56101-3f5f-4dbf-8371-5a7cc1dfc693" />
+
+**Process section**
+
 <img width="1904" alt="image" src="https://github.com/user-attachments/assets/4a20c1e5-9ef0-446e-91e7-69f49e24def6" />
 
 ## Add more processors to the OTel configuration to enrich and process the data
 
 **[Original OTel collector configuration](https://github.com/LisaHJung/O4B/blob/original-setup/otel/otel-collector-config.yaml)**
 
-In the previous section, the following OTel collector configuration was used to:
-- collect traces from the app
-- apply the `Resource` processor to add the service name "demo" to the traces
-- export the traces to the Jaeger backend
-  
+In the original configuration, the OTel collector was configured to use the:
+- `otlp` receiver to receive traces from the app
+- `resource` processor to add the "demo" service name to the traces
+- `debug` exporter to print the traces being received by the collector
+- `otlp/jaeger` exporter to send the traces to Jaeger for storage and visualization. 
+
 <img width="661" alt="image" src="https://github.com/user-attachments/assets/66d6a4e6-e1cc-4190-9b62-2bff6be3157d" />
 
 **[New OTel collector configuration](https://github.com/LisaHJung/O4B/blob/post-processing/otel/otel-collector-config.yaml)**
 
-In the new configuration, we add the following processors to process the traces
-- memory-delimiter
-- resource
-- attributes
-- batch
+In the new configuration, we add the following processors to the original configuration to process the traces even further
+- `memory-delimiter` processor prevents the collector from using too much memory by slowing down or dropping data when needed.
+- `resource` processor modifies resource attributes
+- `attributes` processor modifies or removes/adds attributes on spans
+- `batch` processor batches spans to reduce network overhead
 
-The processed traces are sent to the Jaeger backend for storage and visualized using its UI. 
+Both `memory-delimiter` and `batch` processors are recommended in all production set up.
 
 <img width="645" alt="image" src="https://github.com/user-attachments/assets/2938a98f-ff30-4c30-a9e9-da6563fb8527" />
 <img width="645" alt="image" src="https://github.com/user-attachments/assets/58a54fba-7ddd-45ab-be55-2ca9f3055cd7" />
@@ -132,9 +139,9 @@ Take a look at the terminal that is running Docker which should be displaying th
 **Using the Jaeger UI, verify that traces were processed as intended**
 1. Go back to the [Jaeger UI](http://localhost:16686/) 
 
-2. From the Jaeger UI, select the service named "demo" (orange box) then click on the "Find Traces" button. 
+2. Select the service named "demo" then click on the "Find Traces" button. 
 
-3. Click on one of the traces (orange box)
+3. Click on one of the traces 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/0f5461bc-ef84-46c9-9e0f-0d2f4bda94d8" />
 
 4. Click on the root span (Get/rolldice)
@@ -145,14 +152,14 @@ Take a look at the terminal that is running Docker which should be displaying th
 
 6. Verify whether our traces have been processed correctly with the new OTel collector configuration
 
-**Original set up:**
+**Traces from the collector with the original configuration:**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cfd56101-3f5f-4dbf-8371-5a7cc1dfc693" />
 
-**Post-processing:**
+**Traces from the collector with the new configuration:**
 <img width="1919" alt="image" src="https://github.com/user-attachments/assets/6b84ceab-d7fe-4039-ab86-2520105348ad" />
 
-**Original set up:**
+**Traces from the collector with the original configuration:**
 <img width="1904" alt="image" src="https://github.com/user-attachments/assets/4a20c1e5-9ef0-446e-91e7-69f49e24def6" />
 
-**Post-processing:**
+**Traces from the collector with the new configuration:**
 <img width="1907" alt="image" src="https://github.com/user-attachments/assets/575f569d-364d-4a95-9dce-5f9979478614" />

@@ -4,7 +4,7 @@
 ## Objectives 
 - Auto-instrument a Node.js app to generate traces and send traces to the OTel collector
 - Configure the OTel collector to process traces and export the data to the Jaeger backend
-- Use the Jaeger UI to visualize traces and to verify that the traces have been processed as intended
+- Use the Jaeger UI to visualize traces and to verify that the data has been processed as intended
 
 Note:
 
@@ -13,23 +13,38 @@ Docker runs the OTel collector and Jaeger side-by-side with our app, so we can c
 ## Roll the dice app
 ![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
 
+## Auto-instrumentation
+
+Install the OTel SDK for JS and auto-instrumentations packages:
+```
+npm install @opentelemetry/sdk-node \
+  @opentelemetry/api \
+  @opentelemetry/auto-instrumentations-node \
+  @opentelemetry/exporter-trace-otlp-grpc
+```
+**instrumentation.js**
+```
+const opentelemetry = require('@opentelemetry/sdk-node');
+
+const {
+  getNodeAutoInstrumentations,
+} = require('@opentelemetry/auto-instrumentations-node');
+
+const {
+  OTLPTraceExporter,
+} = require('@opentelemetry/exporter-trace-otlp-grpc');
+
+const sdk = new opentelemetry.NodeSDK({
+  traceExporter: new OTLPTraceExporter({
+     url: 'http://localhost:4317', 
+  }),
+  instrumentations: [getNodeAutoInstrumentations()],
+});
+
+sdk.start();
+```
+
 ## Run the app locally
-
-**Project folder structure**
-
-<img width="222" alt="image" src="https://github.com/user-attachments/assets/af683b58-f226-47c6-b94c-285479417cdf" />
-
-- `app.js` runs the Roll the Dice app
-- `instrumentation.js` auto-instruments the Roll the Dice app
-- `otel/otel-collector-config.yaml` configures the OTel collector
-- `docker-compose.yaml` runs Jaeger and the OTel collector to collect, store, and visualize traces from the Roll the Dice app
-
-**Two project branches**
-- [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup) branch includes the initial set up of the Roll the Dice app, the OTel collector, and Docker that runs both the OTel collector and Jaeger. 
-  - This project is set up to generate traces and send traces to the OTel collector.
-  - The OTel collector is configured receive and export the traces to Jaeger for storage and visualization.
-- [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch includes the same set up except that:
-  - additional processors were added to the OTel collector configuration to further process the traces before they are sent to Jaeger
 
 **Clone the project**
 ```

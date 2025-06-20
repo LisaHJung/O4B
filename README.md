@@ -25,8 +25,14 @@ Docker runs the OTel collector and Jaeger side-by-side with our app, so we can c
 - `docker-compose.yaml` runs Jaeger and the OTel collector to collect, store, and visualize traces from the Roll the Dice app
 
 **Two project branches**
-- [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup) branch shows the initial set up of the Roll the Dice app that send traces to the OTel collector. The collector uses the `Resource` attribute to add the "demo" service name to the traces and sends the traces to Jaeger for storage and visualization. 
-- [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch includes the new OTel collector configuration. The following processors (`memory_limiter`, `resource`, `attributes`, and `batch`) are applied to the traces before being sent to Jaeger. 
+- [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup) branch
+  - includes the initial set up of the Roll the Dice app that sends the traces to the OTel collector.
+  - The collector is configured to use the:
+      - `resource` processor to add the "demo" service name to the traces
+      - `debug` exporter to print the traces being received by the collector
+      - `otlp/jaeger` exporter to send the traces to Jaeger for storage and visualization. 
+- [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch includes the same set up except that:
+  - it includes the following processors (`memory_limiter`, `resource`, `attributes`, and `batch`) in the OTel collector configuration to further process the traces before they are sent to Jaeger
 
 **Clone the project**
 ```
@@ -115,6 +121,9 @@ git checkout post-processing
 //in the project directory
 docker compose down && docker compose up --build 
 ```
+
+The traces from the app should now be sent to the OTel collector with the new configuration that further processses the traces before they are sent to Jaeger. 
+
 **Refresh the Roll the Dice app page multiple times to send traces to the OTel collector**
 
 Take a look at the terminal that is running Docker which should be displaying the OTel collector logs. You should be able to see the traces being sent to the OTel collector.
@@ -140,11 +149,10 @@ Take a look at the terminal that is running Docker which should be displaying th
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cfd56101-3f5f-4dbf-8371-5a7cc1dfc693" />
 
 **Post-processing:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/95a091dd-c6a6-4604-b81d-a95a06bac581" />
+<img width="1919" alt="image" src="https://github.com/user-attachments/assets/6b84ceab-d7fe-4039-ab86-2520105348ad" />
 
 **Original set up:**
 <img width="1904" alt="image" src="https://github.com/user-attachments/assets/4a20c1e5-9ef0-446e-91e7-69f49e24def6" />
 
 **Post-processing:**
-<img width="1909" alt="image" src="https://github.com/user-attachments/assets/aae8a716-06e1-4ad2-b3e2-4712415512b6" />
-
+<img width="1907" alt="image" src="https://github.com/user-attachments/assets/575f569d-364d-4a95-9dce-5f9979478614" />

@@ -1,5 +1,5 @@
 # Demo architecture
-<img width="994" alt="image" src="https://github.com/user-attachments/assets/be93a16f-b4c8-4832-abd4-90912b91b7f2" />
+<img width="1918" alt="image" src="https://github.com/user-attachments/assets/26f0d2b4-ef37-47c8-8734-3a231c274d2e" />
 
 ## Objectives 
 - Auto-instrument a Node.js app to generate traces and send traces to the OTel collector

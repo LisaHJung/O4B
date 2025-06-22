@@ -1,5 +1,5 @@
 # Demo architecture
-<img width="1915" alt="image" src="https://github.com/user-attachments/assets/2cc02be1-bcc4-4104-9502-5151eacc69e4" />
+<img width="1917" alt="image" src="https://github.com/user-attachments/assets/d5d77c09-bca4-44cf-ace6-aad29826f4d4" />
 
 ## Objectives 
 - Auto-instrument a Node.js app to generate traces and send traces to the OTel collector
@@ -9,6 +9,9 @@
 Note:
 
 Docker runs the OTel collector and Jaeger side-by-side with our app, so we can collect and view traces easily, without installing everything by hand.
+
+<img width="1915" alt="image" src="https://github.com/user-attachments/assets/b704511f-41e4-410c-afee-3537718a7894" />
+
 
 ## Roll the dice app
 ![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)

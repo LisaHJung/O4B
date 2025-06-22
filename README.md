@@ -110,7 +110,7 @@ sdk.start();
 
 `instrumentation.js` completes four tasks:
 
-1. Import the required OpenTelemetry packages needed for tracing:
+1. Import the required OTel packages needed for tracing:
 ```
 const opentelemetry = require('@opentelemetry/sdk-node');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
@@ -125,7 +125,7 @@ const sdk = new opentelemetry.NodeSDK({
 });
 ```
 
-3. Configure the tracing system to automatically generate traces and export data to the OpenTelemetry Collector:
+3. Configure the tracing system to automatically generate traces and export data to the OTel Collector:
 
 ```
 const sdk = new opentelemetry.NodeSDK({
@@ -202,8 +202,10 @@ processors:
         value: demo
         action: upsert
 ```
-- `processors.resource.attributes` adds the `service.name = demo` to telemetry data. If that attribute already exists, it overwrites it.
--we add the service name so we can identify which app or service generated the traces when viewing them in the Jaeger UI.
+- The `resource` processor adds the attribute `service.name = demo` to telemetry data.
+- If that attribute already exists within the data, it overwrites it.
+- We add the service name so we can identify which app or service generated the traces.
+
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
 
@@ -218,11 +220,13 @@ exporters:
     tls:
       insecure: true
 ```
-- `exporters.debug` prints the telemetry data (traces, metrics) to the collector’s logs in a detailed way. It’s useful for debugging or development to see what data is flowing through the collector.
+- The `debug` exporter prints the telemetry data (traces, metrics) to the collector’s logs in a detailed way.
+  - It’s useful for debugging or development to see what data is flowing through the collector.
  <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
-- `exporters.otlp/jaeger`sends the telemetry data to a Jaeger backend at port 4317.
+- The `otlp/jaeger` exporter sends the telemetry data to a Jaeger backend at port 4317.
 
-**`Service` configures how data flows inside the collector**
+
+**`Servic pipelines` configure how data flows inside the collector**
 ```
 service:
   pipelines:
@@ -237,37 +241,11 @@ service:
 - The `debug` exporter logs traces to the terminal where the collector is runnig.
 - The `otlp/jaeger` exporter fowards the trace data to Jaeger. 
 
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />
+
 In the `service.piplines` section, processors are applied sequentially in the order listed, so their order matters.
 
 ## Adding more processors to the OTel collector config 
-
-**Original traces**
-
-
-
-
-**[Original OTel collector configuration](https://github.com/LisaHJung/O4B/blob/original-setup/otel/otel-collector-config.yaml)**
-
-In the original configuration, the OTel collector was configured to use the:
-- `otlp` receiver to receive traces from the app
-- `resource` processor to add the "demo" service name to the traces
-- `debug` exporter to print the traces being received by the collector
-- `otlp/jaeger` exporter to send the traces to Jaeger for storage and visualization. 
-
-<img width="661" alt="image" src="https://github.com/user-attachments/assets/66d6a4e6-e1cc-4190-9b62-2bff6be3157d" />
-
-**[New OTel collector configuration](https://github.com/LisaHJung/O4B/blob/post-processing/otel/otel-collector-config.yaml)**
-
-In the new configuration, we add the following processors to the original configuration to process the traces even further
-- `memory-delimiter` processor prevents the collector from using too much memory by slowing down or dropping data when needed.
-- `resource` processor modifies resource attributes
-- `attributes` processor modifies or removes/adds attributes on spans
-- `batch` processor batches spans to reduce network overhead
-
-Both `memory-delimiter` and `batch` processors are recommended in all production set up.
-
-<img width="645" alt="image" src="https://github.com/user-attachments/assets/2938a98f-ff30-4c30-a9e9-da6563fb8527" />
-<img width="645" alt="image" src="https://github.com/user-attachments/assets/58a54fba-7ddd-45ab-be55-2ca9f3055cd7" />
 
 **Switch to the [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch using your terminal**
 ```
@@ -277,9 +255,9 @@ git checkout post-processing
 **Run the OTel collector and Jaeger using Docker**
 ```
 //in the project directory
-docker compose down && docker compose up --build 
+CTRL + C
+docker compose up --build 
 ```
-
 The traces from the app should now be sent to the OTel collector with the new configuration that further processses the traces before they are sent to Jaeger. 
 
 **Refresh the Roll the Dice app page multiple times to send traces to the OTel collector**
@@ -314,3 +292,81 @@ Take a look at the terminal that is running Docker which should be displaying th
 
 **Traces from the collector with the new configuration:**
 <img width="1907" alt="image" src="https://github.com/user-attachments/assets/575f569d-364d-4a95-9dce-5f9979478614" />
+
+
+In the new configuration, we add the following processors to the original configuration to process the traces even further
+- `memory-delimiter` processor prevents the collector from using too much memory by slowing down or dropping data when needed.
+- `resource` processor modifies resource attributes
+- `attributes` processor modifies or removes/adds attributes on spans
+- `batch` processor batches spans to reduce network overhead
+
+
+```
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 2s
+    limit_mib: 512
+    spike_limit_mib: 128
+
+  resource:
+    attributes:
+      - key: service.name
+        value: demo
+        action: upsert
+      - key: deployment.environment
+        value: local
+        action: insert
+      - key: host.arch
+        action: delete
+      - key: host.id
+        action: delete
+      - key: process.command_args
+        action: delete
+      - key: process.executable.path
+        action: delete
+
+  attributes:
+    actions:
+      - key: http.user_agent
+        action: delete
+      - key: net.peer.ip
+        action: delete
+      - key: net.host.port
+        action: delete
+      - key: net.peer.port
+        action: delete
+
+  batch:
+    timeout: 5s
+    send_batch_size: 512
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  otlp/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, attributes, batch]
+      exporters: [debug, otlp/jaeger]
+```
+
+Both `memory-delimiter` and `batch` processors are recommended in all production set up.
+
+<img width="645" alt="image" src="https://github.com/user-attachments/assets/2938a98f-ff30-4c30-a9e9-da6563fb8527" />
+<img width="645" alt="image" src="https://github.com/user-attachments/assets/58a54fba-7ddd-45ab-be55-2ca9f3055cd7" />
+

@@ -1,5 +1,5 @@
 # Demo architecture
-<img width="1918" alt="image" src="https://github.com/user-attachments/assets/26f0d2b4-ef37-47c8-8734-3a231c274d2e" />
+<img width="1910" alt="image" src="https://github.com/user-attachments/assets/e9a76a54-8a72-4060-810d-10cec1affd70" />
 
 ## Objectives 
 - Auto-instrument a Node.js app to generate traces and send traces to the OTel collector
@@ -12,6 +12,38 @@ Docker runs the OTel collector and Jaeger side-by-side with our app, so we can c
 
 ## Roll the dice app
 ![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
+
+## Run the app locally
+
+**Clone the project**
+```
+//directory of your choice
+git clone https://github.com/LisaHJung/O4B.git
+```
+**Start the server**
+
+Execute these commands in the terminal in the following order.
+```
+//in the project directory
+npm install
+npm start
+```
+**Verify the app is running**
+
+In your browser, go to the following url: http://localhost:8080/rolldice
+
+Refresh the page multiple times to see random numbers from 1-6 being generated on your screen. 
+![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
+
+**Run the OTel collector and Jaeger using Docker**
+```
+//in the project directory
+docker compose up --build 
+```
+**Refresh the Roll the Dice app page multiple times to send traces to the OTel collector**
+
+Take a look at the terminal that is running Docker which should be displaying the OTel collector logs. You should be able to see the traces being sent to the OTel collector.
+<img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
 ## Auto-instrumentation
 
@@ -45,7 +77,7 @@ const sdk = new opentelemetry.NodeSDK({
 sdk.start();
 ```
 
-instrumentation.js completes four tasks:
+`instrumentation.js` completes four tasks:
 
 1. Import the required OpenTelemetry packages needed for tracing:
 ```
@@ -77,38 +109,41 @@ const sdk = new opentelemetry.NodeSDK({
 ```
 sdk.start();
 ```
-
-## Run the app locally
-
-**Clone the project**
+## OTel collector configuration
+**otel/otel-collector-config.yaml**
 ```
-//directory of your choice
-git clone https://github.com/LisaHJung/O4B.git
-```
-**Start the server**
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
 
-Execute these commands in the terminal in the following order.
-```
-//in the project directory
-npm install
-npm start
-```
-**Verify the app is running**
+processors:
+  resource:
+    attributes:
+      - key: service.name
+        value: demo
+        action: upsert
 
-In your browser, go to the following url: http://localhost:8080/rolldice
+exporters:
+  debug:
+    verbosity: detailed
 
-Refresh the page multiple times to see random numbers from 1-6 being generated on your screen. 
-![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
+  otlp/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
 
-**Run the OTel collector and Jaeger using Docker**
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [resource]
+      exporters: [debug, otlp/jaeger]
 ```
-//in the project directory
-docker compose up --build 
-```
-**Refresh the Roll the Dice app page multiple times to send traces to the OTel collector**
 
-Take a look at the terminal that is running Docker which should be displaying the OTel collector logs. You should be able to see the traces being sent to the OTel collector.
-<img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
 **Verify that traces are being sent to Jaeger using its UI**
 1. Go the following url (http://localhost:16686/) to access the Jaeger UI. 

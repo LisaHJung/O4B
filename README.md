@@ -1,5 +1,5 @@
 # Demo architecture
-<img width="1291" alt="image" src="https://github.com/user-attachments/assets/23e50dc5-e6fd-4f3f-bb6c-d7ed57f77081" />
+<img width="994" alt="image" src="https://github.com/user-attachments/assets/be93a16f-b4c8-4832-abd4-90912b91b7f2" />
 
 ## Objectives 
 - Auto-instrument a Node.js app to generate traces and send traces to the OTel collector
@@ -15,7 +15,7 @@ Docker runs the OTel collector and Jaeger side-by-side with our app, so we can c
 
 ## Auto-instrumentation
 
-Install the OTel SDK for JS and auto-instrumentations packages:
+In our setup, the following OTel packages have been installed:  
 ```
 npm install @opentelemetry/sdk-node \
   @opentelemetry/api \
@@ -23,6 +23,7 @@ npm install @opentelemetry/sdk-node \
   @opentelemetry/exporter-trace-otlp-grpc
 ```
 **instrumentation.js**
+
 ```
 const opentelemetry = require('@opentelemetry/sdk-node');
 
@@ -41,6 +42,39 @@ const sdk = new opentelemetry.NodeSDK({
   instrumentations: [getNodeAutoInstrumentations()],
 });
 
+sdk.start();
+```
+
+instrumentation.js completes four tasks:
+
+1. Import the required OpenTelemetry packages needed for tracing:
+```
+const opentelemetry = require('@opentelemetry/sdk-node');
+const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
+const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-grpc');
+```
+
+2. Set up the tracing system within our app by creating a new instance of the NodeSDK:
+
+```
+const sdk = new opentelemetry.NodeSDK({
+  // configuration goes here
+});
+```
+
+3. Configure the tracing system to automatically generate traces and export data to the OpenTelemetry Collector:
+
+```
+const sdk = new opentelemetry.NodeSDK({
+  traceExporter: new OTLPTraceExporter({
+    url: 'http://localhost:4317',
+  }),
+  instrumentations: [getNodeAutoInstrumentations()],
+});
+
+```
+4. Start the tracing system to begin recording traces and sending them to the collector:
+```
 sdk.start();
 ```
 

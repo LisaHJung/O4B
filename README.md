@@ -3,25 +3,24 @@
 
 ## Objectives 
 - Auto-instrument a Node.js app to generate traces and send traces to the OTel collector
-- Configure the OTel collector to process traces and export the data to the Jaeger backend
+- Configure the OTel Collector to process traces and export the data to the Jaeger backend
 - Use the Jaeger UI to visualize traces and to verify that the data has been processed as intended
 
 Note:
 
-Docker runs the OTel collector and Jaeger side-by-side with our app, so we can collect and view traces easily, without installing everything by hand.
+Docker runs the OTel Collector and Jaeger side-by-side with our app, so we can collect and view traces easily, without installing everything by hand.
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cb3b6fd1-19a3-4cb9-b92a-4497250f0a39" />
 
 ## Two project branches
 1. [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup)
-- Instruments the Roll the Dice app and sends trace data to the OpenTelemetry Collector.
-- The collector applies minimal processing (adds a service name) before forwarding the traces to Jaeger for storage and visualization.
+- Instruments the Roll the Dice app and sends trace data to the OTel Collector.
+- The Collector applies minimal processing (adds a service name) before forwarding the traces to Jaeger for storage and visualization.
 2. [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) 
-- Uses the same setup as original-setup, but adds additional processors to the OpenTelemetry Collector configuration.
+- Uses the same setup as original-setup, but adds additional processors to the OTel Collector configuration.
 - These processors limit memory usage, enrich and clean up resource and attribute data, and batch traces for more efficient exporting.
 
 
-   
 ## Run the demo locally
 
 **Clone the project**
@@ -49,12 +48,15 @@ Refresh the page multiple times to see random numbers from 1-6 being generated o
 //in the project directory
 docker compose up --build 
 ```
-**Refresh the Roll the Dice app page multiple times to send traces to the OTel collector**
+**Refresh the Roll the Dice app page multiple times to send traces to the OTel Collector**
 
-Take a look at the terminal that is running Docker which should be displaying the OTel collector logs. You should be able to see the traces being sent to the OTel collector.
+Take a look at the terminal that is running Docker.
+
+You will be able to see the logs of traces that are being sent to the Collector.
+
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
-**Verify that traces are being sent to Jaeger using its UI**
+**Verify that Jaeger is receiving traces from the OTel Collector**
 1. Go the following url (http://localhost:16686/) to access the Jaeger UI. 
 
 2. Click on the "Service" section (orange box) to view all the services that are sending traces to Jaeger.
@@ -77,10 +79,20 @@ If you don't see the service name "demo", try refreshing the Roll the Dice app p
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/c62045a1-dd8e-45e0-8014-c8a8388dd87b" />
 
 **Tags section**
-<img width="1919" alt="image" src="https://github.com/user-attachments/assets/e252b440-c153-48e8-90df-55fc82190393" />
+
+The `Tags` section shows helpful details about what happened during a request, like which route was called, what method was used, or if any errors occurred. 
+
+These details are shown as labels with values (like http.method = GET) that help you understand the behavior of your app.
+
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/930107d9-08b2-417a-b41d-5a2d80e54cc8" />
 
 **Process section**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/d48015b2-7388-45a0-a1c4-ea282b4618a7" />
+
+The `Process` section shows information about the app or service that created the trace. 
+
+It includes things like the app’s name, the machine it ran on, and the command used to start it. This helps you see where the request came from and which service handled it — especially useful when you have multiple services or environments.
+
+<img width="1919" alt="image" src="https://github.com/user-attachments/assets/999e8ed2-5c98-4b2f-9053-0bcb48cb4ba0" />
 
 ## Auto-instrumentation
 

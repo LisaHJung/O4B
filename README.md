@@ -3,7 +3,7 @@
 
 ## Objectives 
 - Auto-instrument a Node.js app to generate traces and send traces to the OTel collector
-- Configure the OTel Collector to process traces and export the data to the Jaeger backend
+- Configure the OTel Collector to receive, process, and export traces to the Jaeger backend
 - Use the Jaeger UI to visualize traces and to verify that the data has been processed as intended
 
 Note:
@@ -40,10 +40,10 @@ npm start
 
 In your browser, go to the following url: http://localhost:8080/rolldice
 
-Refresh the page multiple times to see random numbers from 1-6 being generated on your screen. 
+Refresh the page multiple times. This app will generate random numbers from 1-6 just as if you were rolling a dice. 
 ![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
 
-**Run the OTel collector and Jaeger using Docker**
+**Using Docker, run the OTel collector and Jaeger**
 ```
 //in the project directory
 docker compose up --build 
@@ -78,19 +78,18 @@ If you don't see the service name "demo", try refreshing the Roll the Dice app p
 5. Expand the tags and process sections to view the metadata about traces collected from the app
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/826578a3-6f3c-4a33-acfb-f76997eeb9ff" />
 
-**Tags section**
+**The `Tags` section shows helpful details about what happend during a request. 
 
-The `Tags` section shows helpful details about what happened during a request, like which route was called, what method was used, or if any errors occurred. 
+The Tags section shows helpful details about what happened during a request, like which route was called, what method was used, or if any errors occurred.
 
 These details are shown as labels with values (like http.method = GET) that help you understand the behavior of your app.
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/930107d9-08b2-417a-b41d-5a2d80e54cc8" />
 
-**Process section**
+**The `Process` section shows information about the app or service that created the trace.**
 
-The `Process` section shows information about the app or service that created the trace. 
-
-It includes things like the app’s name, the machine it ran on, and the command used to start it. This helps you see where the request came from and which service handled it — especially useful when you have multiple services or environments.
+It includes things such as the machine it ran on, and the command used to start it. 
+This helps you see where the request came from and which service handled it — especially useful when you have multiple services or environments.
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/d15320eb-6d78-4f1d-9ce7-0f6e1b80c419" />
 
@@ -209,8 +208,8 @@ receivers:
         endpoint: 0.0.0.0:4318
 
 ```
-- We configure the `OTLP` receiver to listen for incoming telemetry data in OTLP format on the specified ports: 4317 for gRPC and 4318 for HTTP.
-- 
+-We set up the OTLP receiver to accept incoming telemetry data on two ports — 4317 for gRPC and 4318 for HTTP — so it can receive data from our app.
+  
 **Processors modify, filter, or enrich telemetry data before it gets exported**
 ```
 processors:
@@ -220,7 +219,7 @@ processors:
         value: demo
         action: upsert
 ```
-- The `resource` processor updates or insers (`upsert`) the attribute `service.name = demo` in the telemetry data.
+- The `resource` processor updates or inserts (`upsert`) the attribute `service.name = demo` in the telemetry data.
 - Adding a service name is especially useful when you have multiple services sending telemetry to your observability backend.
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
@@ -236,15 +235,15 @@ exporters:
     tls:
       insecure: true
 ```
-- The `debug` exporter prints the telemetry data (traces, metrics) to the collector’s logs in a detailed way.
-  - It’s useful for debugging or development to see what data is flowing through the collector.
-  - 
+- The `debug` exporter prints the telemetry data to the Collector’s logs in a detailed way.
+  - It’s useful for debugging or development to see what data is flowing through the Collector.
+  
  <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
  
 - The `otlp/jaeger` exporter sends the telemetry data to a Jaeger backend at port 4317.
 
 
-**`Service pipelines` configure how data flows inside the collector**
+**`Service pipelines` configure how data flows inside the Collector**
 ```
 service:
   pipelines:
@@ -263,35 +262,33 @@ service:
 
 In the `service.piplines` section, processors are applied sequentially in the order listed, so their order matters.
 
-## Adding more processors to the OTel collector config 
+## Add more processors to the OTel Collector config 
 
 **Switch to the [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch using your terminal**
 ```
 //in the directory of the project
 git checkout post-processing
 ``` 
-**Run the OTel collector and Jaeger using Docker**
+**Stop and run the OTel Collector and Jaeger again**
 ```
 //in the project directory
 CTRL + C
 docker compose up --build 
 ```
-The traces from the app should now be sent to the OTel collector with the new configuration that further processses the traces before they are sent to Jaeger. 
+The traces from the app should now be sent to the OTel Collector with the new configuration that further processses the traces before they are sent to Jaeger. 
 
 **Refresh the Roll the Dice app page multiple times to send traces to the OTel collector**
 
-Take a look at the terminal that is running Docker which should be displaying the OTel collector logs. You should be able to see the traces being sent to the OTel collector.
+Take a look at the terminal that is running Docker which should be displaying the OTel Collector logs. You should be able to see the traces that are flowing through the OTel Collector.
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
 ### New OTel collector config
 
-In the new configuration, we add the following processors to the original configuration to process the traces even further:
-- `memory-delimiter` processor prevents the collector from using too much memory by slowing down or dropping data when needed.
-- `resource` processor modifies resource attributes
-- `attributes` processor modifies or removes/adds attributes on spans
-- `batch` processor batches spans to reduce network overhead
-  
-Both `memory-delimiter` and `batch` processors are recommended in all production set up.
+We add 4 additional processors to the original config:
+- `memory-delimiter` 
+- `resource` 
+- `attributes` 
+- `batch` 
 
 **otel/otel-collector-config.yaml**
 ```
@@ -357,7 +354,7 @@ service:
       processors: [memory_limiter, resource, attributes, batch]
       exporters: [debug, otlp/jaeger]
 ```
-**`memory-delimiter` processor prevents the collector from using too much memory by slowing down or dropping data when needed.**
+**`memory-limiter` processor prevents the Collector from using too much memory by slowing down or dropping data when needed.**
 ```
 processors:
   memory_limiter:
@@ -366,7 +363,10 @@ processors:
     spike_limit_mib: 128
 ```
 
-**`resource` processor modifies resource attributes**
+
+- `attributes` processor modifies or removes/adds attributes on spans
+- `batch` processor batches spans to reduce network overhead
+**`resource` processor modifies metadata about the service or host**
 ```
  resource:
     attributes:
@@ -389,13 +389,32 @@ processors:
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/56bf7028-ef30-4948-ac48-b469f69429bd" />
 <img width="1918" alt="image" src="https://github.com/user-attachments/assets/fc6bc5fd-77e7-448e-8030-ab427058d913" />
 
-The following resource attributes were deleted to remove sensitive or irrelevant data to reduce noise, improve privacy, and keep trace data focused.
+```
+ resource:
+    attributes:
+      - key: service.name
+        value: demo
+        action: upsert
+      - key: deployment.environment
+        value: local
+        action: insert
+      - key: host.arch
+        action: delete
+      - key: host.id
+        action: delete
+      - key: process.command_args
+        action: delete
+      - key: process.executable.path
+        action: delete
+```
+The following resource attributes were deleted to remove sensitive or irrelevant data.
+This helps ot reduce noise, improve privacy, and keep trace data focused.
   - host.arch
   - host.id
   - process.command_asrgs
   - process.executable.path
   
-**`attributes` processor modifies resource attributes**
+**`attributes` processor modifies or removes/adds attributes on spans**
 
 ```
 attributes:
@@ -421,18 +440,13 @@ Deleting them enhances privacy and security compliance and reduces the size of t
 **Using the Jaeger UI, verify that traces were processed as intended**
 1. Go back to the [Jaeger UI](http://localhost:16686/) 
 
-2. Select the service named "demo" then click on the "Find Traces" button. 
-
-3. Click on one of the traces 
+2. Pull up the traces sent from the `demo` service and select a trace. 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/0f5461bc-ef84-46c9-9e0f-0d2f4bda94d8" />
 
 4. Click on the root span (Get/rolldice)
 <img width="1915" alt="image" src="https://github.com/user-attachments/assets/d5946b07-126c-47c7-926b-d584ac247d73" />
 
-5. Expand tags and process sections to view the metadata about traces collected from the app
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/5f6892ce-3b7b-4137-951b-4ff3982c3305" />
-
-6. Verify whether our traces have been processed correctly with the new OTel collector configuration
+5. Verify whether our traces have been processed correctly with the new OTel Collector configuration
 
 **Traces from the collector with the original configuration:**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/f354a6c0-c301-4fff-b2ab-fb66e3b627e9" />

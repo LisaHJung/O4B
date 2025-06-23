@@ -24,14 +24,24 @@ processors:
         action: delete
       - key: host.id
         action: delete
+      - key: host.name
+        action: delete  
+      - key: process.command
+        action: delete
       - key: process.command_args
         action: delete
       - key: process.executable.path
+        action: delete
+      - key: process.owner
+        action: delete
+      - key: process.pid
         action: delete
 
   attributes:
     actions:
       - key: http.user_agent
+        action: delete
+      - key: net.host.ip
         action: delete
       - key: net.peer.ip
         action: delete

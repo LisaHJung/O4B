@@ -2,7 +2,7 @@
 <img width="1907" alt="image" src="https://github.com/user-attachments/assets/644abade-998b-40d6-aef3-f249eefd0c77" />
 
 ## Objectives 
-- Auto-instrument a Node.js app to generate traces and send traces to the OTel Collector
+- Auto-instrument a Node.js app with OTel SDK to generate traces and send traces to the OTel Collector
 - Configure the OTel Collector to receive, process, and export traces to the Jaeger backend
 - Use the Jaeger UI to visualize traces and to verify that the data has been processed as intended
 
@@ -45,7 +45,7 @@ Refresh the page multiple times. This app will generate random numbers from 1-6 
 
 **Using Docker, run the OTel Collector and Jaeger**
 ```
-//in the project directory
+//project directory in a different terminal
 docker compose up --build 
 ```
 **Refresh the Roll the Dice app page multiple times to send traces to the OTel Collector**
@@ -153,7 +153,7 @@ const sdk = new opentelemetry.NodeSDK({
 });
 
 ```
-4. Start the tracing system to begin recording traces and sending them to the collector:
+4. Start the tracing system to begin recording traces and sending them to the Collector:
 ```
 sdk.start();
 ```
@@ -219,7 +219,7 @@ processors:
         value: demo
         action: upsert
 ```
-- The `resource` processor updates or inserts (`upsert`) the attribute `service.name = demo` in the telemetry data.
+- The `resource` processor updates or inserts (`upsert`) the resource attribute `service.name = demo` in the telemetry data.
 - Adding a service name is especially useful when you have multiple services sending telemetry to your observability backend.
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
 
@@ -254,7 +254,7 @@ service:
 - This defines a pipeline for traces.
 - The traces sent from the app is received by the `otlp` receiver we defined in the configuration.
 - The traces are processed by the `resource` processor, which adds the attribute `service.name = demo`.
-- The `debug` exporter logs traces to the terminal where the collector is runnig.
+- The `debug` exporter logs traces to the terminal where the Collector is running.
 - The `otlp/jaeger` exporter fowards the trace data to Jaeger. 
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />

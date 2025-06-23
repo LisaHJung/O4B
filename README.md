@@ -84,7 +84,7 @@ If you don't see the service name "demo", try refreshing the Roll the Dice app p
 
 It shows helpful details about what happened during a request, like which route was called, what method was used, or if any errors occurred.
 
-These details are shown as key-value pairs (e.g., http.method = GET) that help you understand the behavior of your app.
+Together, it helps you understand the behavior of your app.
 
 **The `Process` section shows information about the app or service that created the trace.**
 
@@ -157,7 +157,7 @@ const sdk = new opentelemetry.NodeSDK({
 ```
 sdk.start();
 ```
-## OTel collector configuration
+## OTel Collector configuration
 **otel/otel-collector-config.yaml**
 ```
 receivers:
@@ -439,7 +439,7 @@ This is done to reduce noise, improve privacy, and keep trace data focused.
   - process.owner
   - process.pid
   
-**`attributes` processor modifies or adds/removes attributes on spans**
+**`attributes` processor modifies, adds, or removes attributes on spans**
 
 ```
 attributes:
@@ -464,6 +464,15 @@ The following resource attributes were deleted to remove sensitive or personally
   - net.peer.port
 
 Deleting them enhances privacy and security compliance and reduces the size of trace payloads.  
+
+**The `batch` processor groups telemetry data into batches before exporting.**
+```
+batch:
+    timeout: 5s
+    send_batch_size: 512
+
+```
+It improves performance, reduces overhead, and handles brief exporter slowdown more gracefully.
 
 **Service pipelines were updated to include the processors that have been added.**
 ```
@@ -511,3 +520,5 @@ The `batch` processor should be listed last to group the data into batches befor
   - [OTel Collector](https://opentelemetry.io/docs/collector/)
     - [List of OTel Collector processors](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor) 
 - [OTel YouTube channel](https://www.youtube.com/@otel-official)
+
+## Repo QR Code:

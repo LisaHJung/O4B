@@ -500,16 +500,16 @@ The `batch` processor should be listed last to group the data into batches befor
 
 5. Verify whether our traces have been processed correctly with the new OTel Collector configuration
 
-**Traces from the collector with the original configuration:**
+**Traces from the original OTel Collector configuration:**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/c138b6d7-bce3-4691-b992-693a90bbeebe" />
 
-**Traces from the collector with the new configuration:**
+**Traces from the new OTel Collector configuration:**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/47821a54-25ea-4419-9708-b9a49641026a" />
 
-**Traces from the collector with the original configuration:**
+**Traces from the original OTel Collector configuration:**
 <img width="1905" alt="image" src="https://github.com/user-attachments/assets/d54248b6-2dd8-4ff2-a4d5-515cdd8ad7fb" />
 
-**Traces from the collector with the new configuration:**
+**Traces from the new OTel Collector configuration:**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/f8e1f131-0c71-47e0-99bc-bef48343bb2f" />
 
 ## Resources
@@ -520,5 +520,6 @@ The `batch` processor should be listed last to group the data into batches befor
   - [OTel Collector](https://opentelemetry.io/docs/collector/)
     - [List of OTel Collector processors](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor) 
 - [OTel YouTube channel](https://www.youtube.com/@otel-official)
+  -[OTel for Beginners series](https://youtu.be/iEEIabOha8U?feature=shared) 
 
 ## Repo QR Code:

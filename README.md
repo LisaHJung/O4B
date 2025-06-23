@@ -1,5 +1,5 @@
 # Demo architecture
-<img width="1917" alt="image" src="https://github.com/user-attachments/assets/d5d77c09-bca4-44cf-ace6-aad29826f4d4" />
+<img width="1907" alt="image" src="https://github.com/user-attachments/assets/644abade-998b-40d6-aef3-f249eefd0c77" />
 
 ## Objectives 
 - Auto-instrument a Node.js app to generate traces and send traces to the OTel collector
@@ -10,17 +10,19 @@ Note:
 
 Docker runs the OTel collector and Jaeger side-by-side with our app, so we can collect and view traces easily, without installing everything by hand.
 
-<img width="1915" alt="image" src="https://github.com/user-attachments/assets/b704511f-41e4-410c-afee-3537718a7894" />
-
-
-## Roll the dice app
-![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/cb3b6fd1-19a3-4cb9-b92a-4497250f0a39" />
 
 ## Two project branches
-1. `original-setup`
-2. `post-processing`
+1. [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup)
+- Instruments the Roll the Dice app and sends trace data to the OpenTelemetry Collector.
+- The collector applies minimal processing (adds a service name) before forwarding the traces to Jaeger for storage and visualization.
+2. [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) 
+- Uses the same setup as original-setup, but adds additional processors to the OpenTelemetry Collector configuration.
+- These processors limit memory usage, enrich and clean up resource and attribute data, and batch traces for more efficient exporting.
+
+
    
-## Run the app locally
+## Run the demo locally
 
 **Clone the project**
 ```

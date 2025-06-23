@@ -295,21 +295,21 @@ Take a look at the terminal that is running Docker which should be displaying th
 <img width="1915" alt="image" src="https://github.com/user-attachments/assets/d5946b07-126c-47c7-926b-d584ac247d73" />
 
 5. Expand tags and process sections to view the metadata about traces collected from the app
-<img width="1917" alt="image" src="https://github.com/user-attachments/assets/3acfaa72-d798-4f3d-bc02-d3e03ce6fedd" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/5f6892ce-3b7b-4137-951b-4ff3982c3305" />
 
 6. Verify whether our traces have been processed correctly with the new OTel collector configuration
 
 **Traces from the collector with the original configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/cfd56101-3f5f-4dbf-8371-5a7cc1dfc693" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/f354a6c0-c301-4fff-b2ab-fb66e3b627e9" />
 
 **Traces from the collector with the new configuration:**
-<img width="1919" alt="image" src="https://github.com/user-attachments/assets/6b84ceab-d7fe-4039-ab86-2520105348ad" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/54bad8db-e307-46e6-bb4a-00856193a984" />
 
 **Traces from the collector with the original configuration:**
-<img width="1904" alt="image" src="https://github.com/user-attachments/assets/4a20c1e5-9ef0-446e-91e7-69f49e24def6" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/f148f08e-a971-4d9e-9b82-75793bc42ff3" />
 
 **Traces from the collector with the new configuration:**
-<img width="1907" alt="image" src="https://github.com/user-attachments/assets/575f569d-364d-4a95-9dce-5f9979478614" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/9867288c-fba5-4b97-a1d5-e76eadb69505" />
 
 ### New OTel collector config
 

@@ -76,7 +76,7 @@ If you don't see the service name "demo", try refreshing the Roll the Dice app p
 <img width="1919" alt="image" src="https://github.com/user-attachments/assets/b5e437b8-2cda-4760-93b6-0cc8dcbdba7b" />
 
 5. Expand the tags and process sections to view the metadata about traces collected from the app
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/c62045a1-dd8e-45e0-8014-c8a8388dd87b" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/826578a3-6f3c-4a33-acfb-f76997eeb9ff" />
 
 **Tags section**
 

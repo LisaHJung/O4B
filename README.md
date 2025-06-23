@@ -318,18 +318,28 @@ processors:
         action: delete
       - key: host.id
         action: delete
+      - key: host.name
+        action: delete  
+      - key: process.command
+        action: delete
       - key: process.command_args
         action: delete
       - key: process.executable.path
+        action: delete
+      - key: process.owner
+        action: delete
+      - key: process.pid
         action: delete
 
   attributes:
     actions:
       - key: http.user_agent
         action: delete
-      - key: net.peer.ip
+      - key: net.host.ip
         action: delete
       - key: net.host.port
+        action: delete
+      - key: net.peer.ip
         action: delete
       - key: net.peer.port
         action: delete
@@ -380,17 +390,26 @@ processors:
         action: delete
       - key: host.id
         action: delete
+      - key: host.name
+        action: delete  
+      - key: process.command
+        action: delete
       - key: process.command_args
         action: delete
       - key: process.executable.path
         action: delete
+      - key: process.owner
+        action: delete
+      - key: process.pid
+        action: delete
+
 ```
 - `service.name` and `deployment.environment` resource attributes were added to the traces
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/56bf7028-ef30-4948-ac48-b469f69429bd" />
 <img width="1918" alt="image" src="https://github.com/user-attachments/assets/fc6bc5fd-77e7-448e-8030-ab427058d913" />
 
 ```
- resource:
+  resource:
     attributes:
       - key: service.name
         value: demo
@@ -402,37 +421,53 @@ processors:
         action: delete
       - key: host.id
         action: delete
+      - key: host.name
+        action: delete  
+      - key: process.command
+        action: delete
       - key: process.command_args
         action: delete
       - key: process.executable.path
         action: delete
+      - key: process.owner
+        action: delete
+      - key: process.pid
+        action: delete
+
 ```
 The following resource attributes were deleted to remove sensitive or irrelevant data.
 This helps ot reduce noise, improve privacy, and keep trace data focused.
   - host.arch
   - host.id
+  - host.name
+  - process.command
   - process.command_asrgs
   - process.executable.path
+  - process.owner
+  - process.pid
   
 **`attributes` processor modifies or removes/adds attributes on spans**
 
 ```
 attributes:
-  actions:
-    - key: http.user_agent
-      action: delete
-    - key: net.peer.ip
-      action: delete
-    - key: net.host.port
-      action: delete
-    - key: net.peer.port
-      action: delete
+    actions:
+      - key: http.user_agent
+        action: delete
+      - key: net.host.ip
+        action: delete
+      - key: net.host.port
+        action: delete
+      - key: net.peer.ip
+        action: delete
+      - key: net.peer.port
+        action: delete
 ```
 
 The following resource attributes were deleted to remove sensitive or personally identifiable information (PII). 
   - http.user_agent
   - net.peer.ip
   - net.host.port
+  - net.peer.ip
   - net.peer.port
 
 Deleting them enhances privacy and security compliance and reduces the size of trace payloads.  
@@ -452,13 +487,13 @@ Deleting them enhances privacy and security compliance and reduces the size of t
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/f354a6c0-c301-4fff-b2ab-fb66e3b627e9" />
 
 **Traces from the collector with the new configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/54bad8db-e307-46e6-bb4a-00856193a984" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/9cc3be41-1c5b-4d7d-804e-baf59720cc6b" />
 
 **Traces from the collector with the original configuration:**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/f148f08e-a971-4d9e-9b82-75793bc42ff3" />
 
 **Traces from the collector with the new configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/9e4e98ad-4083-428e-8186-b756d749fb38" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/f8e1f131-0c71-47e0-99bc-bef48343bb2f" />
 
 ## Resources
 - [OTel documentation](https://opentelemetry.io/docs/)

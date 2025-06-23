@@ -92,7 +92,7 @@ The `Process` section shows information about the app or service that created th
 
 It includes things like the app’s name, the machine it ran on, and the command used to start it. This helps you see where the request came from and which service handled it — especially useful when you have multiple services or environments.
 
-<img width="1919" alt="image" src="https://github.com/user-attachments/assets/999e8ed2-5c98-4b2f-9053-0bcb48cb4ba0" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/d15320eb-6d78-4f1d-9ce7-0f6e1b80c419" />
 
 ## Auto-instrumentation
 

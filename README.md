@@ -205,7 +205,7 @@ processors:
 - The `resource` processor adds the attribute `service.name = demo` to telemetry data.
 - If that attribute already exists within the data, it overwrites it.
 - We add the service name so we can identify which app or service generated the traces.
-
+upsert means insert or update if exists
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
 
@@ -293,14 +293,17 @@ Take a look at the terminal that is running Docker which should be displaying th
 **Traces from the collector with the new configuration:**
 <img width="1907" alt="image" src="https://github.com/user-attachments/assets/575f569d-364d-4a95-9dce-5f9979478614" />
 
+### New OTel collector config
 
-In the new configuration, we add the following processors to the original configuration to process the traces even further
+In the new configuration, we add the following processors to the original configuration to process the traces even further:
 - `memory-delimiter` processor prevents the collector from using too much memory by slowing down or dropping data when needed.
 - `resource` processor modifies resource attributes
 - `attributes` processor modifies or removes/adds attributes on spans
 - `batch` processor batches spans to reduce network overhead
+  
+Both `memory-delimiter` and `batch` processors are recommended in all production set up.
 
-
+**otel/otel-collector-config.yaml**
 ```
 receivers:
   otlp:
@@ -364,9 +367,63 @@ service:
       processors: [memory_limiter, resource, attributes, batch]
       exporters: [debug, otlp/jaeger]
 ```
+**`memory-delimiter` processor prevents the collector from using too much memory by slowing down or dropping data when needed.**
+```
+processors:
+  memory_limiter:
+    check_interval: 2s
+    limit_mib: 512
+    spike_limit_mib: 128
+```
 
-Both `memory-delimiter` and `batch` processors are recommended in all production set up.
+**`resource` processor modifies resource attributes**
+```
+ resource:
+    attributes:
+      - key: service.name
+        value: demo
+        action: upsert
+      - key: deployment.environment
+        value: local
+        action: insert
+      - key: host.arch
+        action: delete
+      - key: host.id
+        action: delete
+      - key: process.command_args
+        action: delete
+      - key: process.executable.path
+        action: delete
+```
+- `service.name` and `deployment.environment` resource attributes were added to the traces
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/56bf7028-ef30-4948-ac48-b469f69429bd" />
+<img width="1918" alt="image" src="https://github.com/user-attachments/assets/fc6bc5fd-77e7-448e-8030-ab427058d913" />
 
-<img width="645" alt="image" src="https://github.com/user-attachments/assets/2938a98f-ff30-4c30-a9e9-da6563fb8527" />
-<img width="645" alt="image" src="https://github.com/user-attachments/assets/58a54fba-7ddd-45ab-be55-2ca9f3055cd7" />
+The following resource attributes were deleted to remove sensitive or irrelevant data to reduce noise, improve privacy, and keep trace data focused.
+  - host.arch
+  - host.id
+  - process.command_asrgs
+  - process.executable.path
+  
+**`attributes` processor modifies resource attributes**
 
+```
+attributes:
+  actions:
+    - key: http.user_agent
+      action: delete
+    - key: net.peer.ip
+      action: delete
+    - key: net.host.port
+      action: delete
+    - key: net.peer.port
+      action: delete
+```
+
+The following resource attributes were deleted to remove sensitive or personally identifiable information (PII). 
+  - http.user_agent
+  - net.peer.ip
+  - net.host.port
+  - net.peer.port
+
+Deleting them enhances privacy and security compliance and reduces the size of trace payloads.  

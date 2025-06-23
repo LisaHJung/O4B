@@ -446,3 +446,9 @@ Deleting them enhances privacy and security compliance and reduces the size of t
 **Traces from the collector with the new configuration:**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/9e4e98ad-4083-428e-8186-b756d749fb38" />
 
+## Resources
+- [OTel documentation](https://opentelemetry.io/docs/)
+  - [Language APIs and SDKs](https://opentelemetry.io/docs/languages/)
+  - [Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/)
+  - [OTel Collector](https://opentelemetry.io/docs/collector/)
+- [OTel YouTube channel](https://www.youtube.com/@otel-official)

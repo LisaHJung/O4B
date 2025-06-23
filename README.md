@@ -16,6 +16,10 @@ Docker runs the OTel collector and Jaeger side-by-side with our app, so we can c
 ## Roll the dice app
 ![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
 
+## Two project branches
+1. `original-setup`
+2. `post-processing`
+   
 ## Run the app locally
 
 **Clone the project**
@@ -125,7 +129,7 @@ const sdk = new opentelemetry.NodeSDK({
 });
 ```
 
-3. Configure the tracing system to automatically generate traces and export data to the OTel Collector:
+3. Configure the tracing system to automatically generate traces and export data to the local OTel Collector:
 
 ```
 const sdk = new opentelemetry.NodeSDK({
@@ -191,8 +195,8 @@ receivers:
         endpoint: 0.0.0.0:4318
 
 ```
-- `receivers.otlp.protocols` listens on the specified ports (4317 for gRPC, 4318 for HTTP) for incoming telemetry data in the OTLP format.
-
+- We configure the `OTLP` receiver to listen for incoming telemetry data in OTLP format on the specified ports: 4317 for gRPC and 4318 for HTTP.
+- 
 **Processors modify, filter, or enrich telemetry data before it gets exported**
 ```
 processors:
@@ -202,10 +206,8 @@ processors:
         value: demo
         action: upsert
 ```
-- The `resource` processor adds the attribute `service.name = demo` to telemetry data.
-- If that attribute already exists within the data, it overwrites it.
-- We add the service name so we can identify which app or service generated the traces.
-upsert means insert or update if exists
+- The `resource` processor updates or insers (`upsert`) the attribute `service.name = demo` in the telemetry data.
+- Adding a service name is especially useful when you have multiple services sending telemetry to your observability backend.
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
 
@@ -222,11 +224,13 @@ exporters:
 ```
 - The `debug` exporter prints the telemetry data (traces, metrics) to the collector’s logs in a detailed way.
   - It’s useful for debugging or development to see what data is flowing through the collector.
+  - 
  <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
+ 
 - The `otlp/jaeger` exporter sends the telemetry data to a Jaeger backend at port 4317.
 
 
-**`Servic pipelines` configure how data flows inside the collector**
+**`Service pipelines` configure how data flows inside the collector**
 ```
 service:
   pipelines:

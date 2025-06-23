@@ -260,7 +260,6 @@ service:
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />
 
-In the `service.piplines` section, processors are applied sequentially in the order listed, so their order matters.
 
 ## Add more processors to the OTel Collector config 
 
@@ -471,6 +470,38 @@ The following resource attributes were deleted to remove sensitive or personally
   - net.peer.port
 
 Deleting them enhances privacy and security compliance and reduces the size of trace payloads.  
+
+**Service pipelines were updated to include the processors added in the order**
+```
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, attributes, batch]
+      exporters: [debug, otlp/jaeger]
+```
+
+In the `service.piplines` section, processors are applied sequentially in the order listed, so their order matters.
+1. memory_limiter
+Purpose: Prevents the Collector from using too much memory by dropping data when limits are reached.
+
+Why it's first: It protects the Collector right at the entry point, before any processing or buffering happens.
+
+2. resource
+Purpose: Adds or modifies resource attributes (e.g., service.name, host.name, etc.).
+
+Why it's second: This sets up basic resource metadata early so that later processors (like attributes) or exporters have that info.
+
+3. attributes
+Purpose: Adds, modifies, or removes attributes from spans, metrics, or logs.
+
+Why it's third: You may want to tweak attributes after resource-level data is set. For example, you might use a value added by the resource processor to inform your attribute changes.
+
+4. batch
+Purpose: Groups data into batches before exporting.
+
+Why it's last: It's more efficient to send telemetry in chunks. This should always be near the end, right before exporting.
+
 
 **Using the Jaeger UI, verify that traces were processed as intended**
 1. Go back to the [Jaeger UI](http://localhost:16686/) 

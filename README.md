@@ -528,7 +528,9 @@ Why it's last: It's more efficient to send telemetry in chunks. This should alwa
 
 ## Resources
 - [OTel documentation](https://opentelemetry.io/docs/)
+  - Ask AI (upper right corner of the OTel documentation)
   - [Language APIs and SDKs](https://opentelemetry.io/docs/languages/)
   - [Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/)
   - [OTel Collector](https://opentelemetry.io/docs/collector/)
+    - [List of OTel Collector processors](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor) 
 - [OTel YouTube channel](https://www.youtube.com/@otel-official)

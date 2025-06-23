@@ -20,7 +20,7 @@ Docker runs the OTel Collector and Jaeger side-by-side with our app, so we can c
 - Uses the same setup as original-setup, but adds additional processors to the OTel Collector configuration.
 - These processors limit memory usage, enrich and clean up resource and attribute data, and batch traces for more efficient exporting.
 
-
+![](images/pdf.pdf)
 ## Run the demo locally
 
 **Clone the project**

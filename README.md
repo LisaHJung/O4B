@@ -283,34 +283,6 @@ The traces from the app should now be sent to the OTel collector with the new co
 Take a look at the terminal that is running Docker which should be displaying the OTel collector logs. You should be able to see the traces being sent to the OTel collector.
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
-**Using the Jaeger UI, verify that traces were processed as intended**
-1. Go back to the [Jaeger UI](http://localhost:16686/) 
-
-2. Select the service named "demo" then click on the "Find Traces" button. 
-
-3. Click on one of the traces 
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/0f5461bc-ef84-46c9-9e0f-0d2f4bda94d8" />
-
-4. Click on the root span (Get/rolldice)
-<img width="1915" alt="image" src="https://github.com/user-attachments/assets/d5946b07-126c-47c7-926b-d584ac247d73" />
-
-5. Expand tags and process sections to view the metadata about traces collected from the app
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/5f6892ce-3b7b-4137-951b-4ff3982c3305" />
-
-6. Verify whether our traces have been processed correctly with the new OTel collector configuration
-
-**Traces from the collector with the original configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/f354a6c0-c301-4fff-b2ab-fb66e3b627e9" />
-
-**Traces from the collector with the new configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/54bad8db-e307-46e6-bb4a-00856193a984" />
-
-**Traces from the collector with the original configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/f148f08e-a971-4d9e-9b82-75793bc42ff3" />
-
-**Traces from the collector with the new configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/9867288c-fba5-4b97-a1d5-e76eadb69505" />
-
 ### New OTel collector config
 
 In the new configuration, we add the following processors to the original configuration to process the traces even further:
@@ -445,3 +417,32 @@ The following resource attributes were deleted to remove sensitive or personally
   - net.peer.port
 
 Deleting them enhances privacy and security compliance and reduces the size of trace payloads.  
+
+**Using the Jaeger UI, verify that traces were processed as intended**
+1. Go back to the [Jaeger UI](http://localhost:16686/) 
+
+2. Select the service named "demo" then click on the "Find Traces" button. 
+
+3. Click on one of the traces 
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/0f5461bc-ef84-46c9-9e0f-0d2f4bda94d8" />
+
+4. Click on the root span (Get/rolldice)
+<img width="1915" alt="image" src="https://github.com/user-attachments/assets/d5946b07-126c-47c7-926b-d584ac247d73" />
+
+5. Expand tags and process sections to view the metadata about traces collected from the app
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/5f6892ce-3b7b-4137-951b-4ff3982c3305" />
+
+6. Verify whether our traces have been processed correctly with the new OTel collector configuration
+
+**Traces from the collector with the original configuration:**
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/f354a6c0-c301-4fff-b2ab-fb66e3b627e9" />
+
+**Traces from the collector with the new configuration:**
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/54bad8db-e307-46e6-bb4a-00856193a984" />
+
+**Traces from the collector with the original configuration:**
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/f148f08e-a971-4d9e-9b82-75793bc42ff3" />
+
+**Traces from the collector with the new configuration:**
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/9e4e98ad-4083-428e-8186-b756d749fb38" />
+

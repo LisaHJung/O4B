@@ -7,8 +7,8 @@
 - Use the Jaeger UI to visualize traces and to verify that the data has been processed as intended
 
 Note:
-
-Docker runs the OTel Collector and Jaeger side-by-side with our app, so we can collect and view traces easily, without installing everything by hand.
+- Ensure that you have [Node.js](https://nodejs.org/en/download/) installed locally
+- Docker runs the OTel Collector and Jaeger side-by-side with our app, so we can collect and view traces easily, without installing everything by hand.
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cb3b6fd1-19a3-4cb9-b92a-4497250f0a39" />
 

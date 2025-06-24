@@ -2,9 +2,9 @@
 <img width="1907" alt="image" src="https://github.com/user-attachments/assets/644abade-998b-40d6-aef3-f249eefd0c77" />
 
 ## Objectives 
-- Auto-instrument a Node.js app with OTel SDK to generate traces and send traces to the OTel Collector
-- Configure the OTel Collector to receive, process, and export traces to the Jaeger backend
-- Use the Jaeger UI to visualize traces and verify that the data has been processed as intended
+- Auto-instrument a Node.js app with OTel SDK to generate traces and send traces to the OTel Collector.
+- Configure the OTel Collector to receive, process, and export traces to the Jaeger backend.
+- Use the Jaeger UI to visualize and verify that the traces have been correctly processed.
 
 Note:
 - Ensure that you have [Node.js](https://nodejs.org/en/download/) installed locally.

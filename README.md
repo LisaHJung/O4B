@@ -276,8 +276,11 @@ docker compose up --build
 
 **Refresh the Roll the Dice app page multiple times to send the traces to the newly configured OTel Collector**
 
-Verify that the traces are flowing through the OTel Collector. 
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
+
+**Verify that the traces have been processed as intended by examing traces sent to the Jaeger UI.**
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/72ea707d-321d-42b7-89a3-4b11a4114ccd" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/e6dfa298-5721-49fb-abaa-8b0e89af651c" />
 
 ### New OTel collector configuration
 

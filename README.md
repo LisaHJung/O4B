@@ -517,5 +517,7 @@ The `batch` processor should be listed *last* to group the data into batches bef
     - Stay tuned for videos on this talk + working with other telemetry types 
 
 ## QR code for project repo:
+![image](https://github.com/user-attachments/assets/0ac2cc04-77aa-492e-8dfd-f582151df1ec)
 
 ## QR code for lightning talk 
+![image](https://image-charts.com/chart?chs=300x300&cht=qr&choe=UTF-8&chl=https://sched.co/25vDo)

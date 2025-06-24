@@ -1,5 +1,5 @@
 # Demo architecture
-<img width="1907" alt="image" src="https://github.com/user-attachments/assets/644abade-998b-40d6-aef3-f249eefd0c77" />
+<img width="1918" alt="image" src="https://github.com/user-attachments/assets/af320cc8-b7ac-4cca-8501-1b375f727df6" />
 
 ## Objectives 
 - Auto-instrument a Node.js app with OTel SDK to generate traces and send traces to the OTel Collector.
@@ -10,7 +10,7 @@ Note:
 - Ensure that you have [Node.js](https://nodejs.org/en/download/) installed locally.
 - Docker runs the OTel Collector and Jaeger side by side with our app, allowing us to easily collect and view traces , without manually installing everything. 
 
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/cb3b6fd1-19a3-4cb9-b92a-4497250f0a39" />
+<img width="1918" alt="image" src="https://github.com/user-attachments/assets/a398be28-3bbc-4895-b343-8cbc09fac606" />
 
 ## Two project branches
 1. [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup)

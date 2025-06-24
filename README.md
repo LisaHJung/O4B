@@ -96,7 +96,6 @@ It helps you see where the request came from and which service handled it.
 In our setup, the following OTel packages have been installed:  
 ```
 npm install @opentelemetry/sdk-node \
-  @opentelemetry/api \
   @opentelemetry/auto-instrumentations-node \
   @opentelemetry/exporter-trace-otlp-grpc
 ```

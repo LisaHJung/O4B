@@ -77,13 +77,11 @@ If you don't see the service name "demo", try refreshing the Roll the Dice app p
 5. Expand the tags and process sections to view the metadata about traces collected from the app
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/826578a3-6f3c-4a33-acfb-f76997eeb9ff" />
 
-**The `Tags` section shows helpful details about what happend during a request.** 
+**The `Tags` section shows details about what happend during a request.** 
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/930107d9-08b2-417a-b41d-5a2d80e54cc8" />
 
-such as which route was called, what method was used, or if any errors occurred.
-
-It consists of `span attributes` help you understand the behavior of your app.
+It consists of `span attributes` (i.e. routes, method, errors)  tohelp you understand the behavior of your app.
 
 **The `Process` section shows information about the app or service that created the trace.**
 
@@ -195,7 +193,7 @@ service:
 1. Receivers
 2. Processors
 3. Exporters
-4. Service pipelines
+4. Service 
 
 **`Receivers` tell the collector how to receive telemetry data**
 ```
@@ -242,7 +240,7 @@ exporters:
 - The `otlp/jaeger` exporter sends the telemetry data to a Jaeger backend at port 4317.
 
 
-**`Service pipelines` configure how data flows inside the Collector**
+**`Service` configure how data flows inside the Collector**
 ```
 service:
   pipelines:
@@ -251,7 +249,7 @@ service:
       processors: [resource]
       exporters: [debug, otlp/jaeger]
 ```
-- This defines a pipeline for traces.
+- Our configuration defines a pipeline for traces.
 - The traces sent from the app is received by the `otlp` receiver we defined in the configuration.
 - The traces are processed by the `resource` processor, which adds the resource attribute `service.name = demo`.
 - The `debug` exporter logs traces to the terminal where the Collector is running.
@@ -278,7 +276,7 @@ docker compose up --build
 
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
-**Verify that the traces have been processed as intended by examing traces sent to the Jaeger UI.**
+**Using the Jaeger UI, examine the traces to verify that they have processed correctly.**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/72ea707d-321d-42b7-89a3-4b11a4114ccd" />
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/e6dfa298-5721-49fb-abaa-8b0e89af651c" />
 
@@ -492,7 +490,7 @@ batch:
 ```
 It improves performance and reduces overhead. This processor is recommended to be added to the collector configuration as a best practice. 
 
-**The Service pipelines were updated to include the processors that have been added.**
+**The Service was updated to include the processors that have been added.**
 ```
 service:
   pipelines:
@@ -505,7 +503,7 @@ service:
 **Note:**
 In the `service.piplines` section, the processors are applied sequentially in the order listed, so pay attention to the order! 
 
-The `batch` processor should be listed last to group the data into batches before exporting. 
+The `batch` processor should be listed *last* to group the data into batches before exporting. 
 
 
 ## Resources

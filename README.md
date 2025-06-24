@@ -4,11 +4,11 @@
 ## Objectives 
 - Auto-instrument a Node.js app with OTel SDK to generate traces and send traces to the OTel Collector
 - Configure the OTel Collector to receive, process, and export traces to the Jaeger backend
-- Use the Jaeger UI to visualize traces and to verify that the data has been processed as intended
+- Use the Jaeger UI to visualize traces and verify that the data has been processed as intended
 
 Note:
-- Ensure that you have [Node.js](https://nodejs.org/en/download/) installed locally
-- Docker runs the OTel Collector and Jaeger side-by-side with our app, so we can collect and view traces easily, without installing everything by hand.
+- Ensure that you have [Node.js](https://nodejs.org/en/download/) installed locally.
+- Docker runs the OTel Collector and Jaeger side by side with our app, allowing us to easily collect and view traces , without manually installing everything. 
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cb3b6fd1-19a3-4cb9-b92a-4497250f0a39" />
 
@@ -37,9 +37,9 @@ npm start
 ```
 **Verify the app is running**
 
-In your browser, go to the following url: http://localhost:8080/rolldice
+In your browser, go to the following URL: http://localhost:8080/rolldice
 
-Refresh the page multiple times. This app will generate a random number from 1-6 just as if you were rolling a dice. 
+Refresh the page multiple times. This app will generate a random number from 1-6 just as if you were rolling a die. 
 ![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
 
 **Using Docker, run the OTel Collector and Jaeger**
@@ -56,7 +56,7 @@ You will be able to see the logs of traces that are flowing through the Collecto
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
 **Verify that Jaeger is receiving traces from the OTel Collector**
-1. Go the following url (http://localhost:16686/) to access the Jaeger UI. 
+1. Go to the following URL (http://localhost:16686/) to access the Jaeger UI. 
 
 2. Click on the "Service" section (orange box) to view all the services that are sending traces to Jaeger.
 
@@ -66,7 +66,7 @@ In the OTel config, we set our service name to "demo".
 
 Select the service "demo" then click on the "Find Traces" button (blue arrow).
 
-If you don't see the service name "demo", try refreshing the Roll the Dice app page multiple times, then refreshing the Jaeger UI page.
+If you don't see the service name "demo", try refreshing the Roll the Dice app page multiple times, and then refreshing the Jaeger UI page.
 
 3. Click on one of the traces (orange box)
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />
@@ -77,11 +77,11 @@ If you don't see the service name "demo", try refreshing the Roll the Dice app p
 5. Expand the tags and process sections to view the metadata about traces collected from the app
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/826578a3-6f3c-4a33-acfb-f76997eeb9ff" />
 
-**The `Tags` section shows details about what happend during a request.** 
+**The `Tags` section shows details about what happened during a request.** 
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/930107d9-08b2-417a-b41d-5a2d80e54cc8" />
 
-It consists of `span attributes` (i.e. routes, method, errors)  tohelp you understand the behavior of your app.
+It consists of `span attributes` (i.e. routes, method, errors)  to help you understand the behavior of your app.
 
 **The `Process` section shows information about the app or service that created the trace.**
 
@@ -252,19 +252,19 @@ service:
 - The traces sent from the app is received by the `otlp` receiver we defined in the configuration.
 - The traces are processed by the `resource` processor, which adds the resource attribute `service.name = demo`.
 - The `debug` exporter logs traces to the terminal where the Collector is running.
-- The `otlp/jaeger` exporter fowards the trace data to Jaeger. 
+- The `otlp/jaeger` exporter forwards the trace data to Jaeger. 
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />
 
 
-## Add more processors to the OTel Collector config 
+## Add more processors to the OTel Collector config. 
 
 **Switch to the [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch using your terminal**
 ```
 //in the directory of the project
 git checkout post-processing
 ``` 
-**Stop and run the OTel Collector and Jaeger again**
+**Stop and restart the OTel Collector and Jaeger**
 ```
 //in the project directory
 CTRL + C
@@ -275,7 +275,7 @@ docker compose up --build
 
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
-**Using the Jaeger UI, examine the traces to verify that they have processed correctly.**
+**Using the Jaeger UI, examine the traces to verify that they have been processed correctly.**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/72ea707d-321d-42b7-89a3-4b11a4114ccd" />
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/e6dfa298-5721-49fb-abaa-8b0e89af651c" />
 
@@ -400,7 +400,7 @@ processors:
         action: delete
 
 ```
-- `service.name` and `deployment.environment` resource attributes were added to the traces
+- `service.name` and `deployment.environment` resource attributes were added to the traces.
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/56bf7028-ef30-4948-ac48-b469f69429bd" />
 <img width="1918" alt="image" src="https://github.com/user-attachments/assets/fc6bc5fd-77e7-448e-8030-ab427058d913" />
 
@@ -448,7 +448,7 @@ This is done to reduce noise, improve privacy, and keep trace data focused.
 **Traces from the new OTel Collector configuration:**
 <img width="1919" alt="image" src="https://github.com/user-attachments/assets/fac109ca-1ff3-4c8d-9df2-054c7bbf4fd5" />
 
-**The `attributes` processor modifies, adds, or removes attributes on spans**
+**The `attributes` processor modifies, adds, or removes attributes on spans.**
 
 ```
 attributes:
@@ -489,7 +489,7 @@ batch:
 ```
 It improves performance and reduces overhead. This processor is recommended to be added to the collector configuration as a best practice. 
 
-**The Service was updated to include the processors that have been added.**
+**The Service component was updated to include the processors that have been added.**
 ```
 service:
   pipelines:
@@ -500,7 +500,7 @@ service:
 ```
 
 **Note:**
-In the `service.piplines` section, the processors are applied sequentially in the order listed, so pay attention to the order! 
+In the `service` section, the processors are applied sequentially in the order listed, so pay attention to the order! 
 
 The `batch` processor should be listed *last* to group the data into batches before exporting. 
 
@@ -514,7 +514,7 @@ The `batch` processor should be listed *last* to group the data into batches bef
     - [List of OTel Collector processors](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor) 
 - [OTel YouTube channel](https://www.youtube.com/@otel-official)
   - [OTel for Beginners series - The JavaScript Journey](https://youtu.be/iEEIabOha8U?feature=shared)
-    - Stay tuned for videos on this talk + working with other telemetry types 
+    - Stay tuned for videos on this talk + working with other telemetry types. 
 
 ## QR code for project repo:
 ![image](https://github.com/user-attachments/assets/0ac2cc04-77aa-492e-8dfd-f582151df1ec)

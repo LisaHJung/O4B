@@ -20,7 +20,6 @@ Docker runs the OTel Collector and Jaeger side-by-side with our app, so we can c
 - Uses the same setup as original-setup, but adds additional processors to the OTel Collector configuration.
 - These processors limit memory usage, enrich and clean up resource and attribute data, and batch traces for more efficient exporting.
 
-![alt text](https://github.com/LisaHJung/O4B/blob/7eda69cf98d01b074c79b0bb81c89b587f362c04/images/pdf.pdf)
 ## Run the demo locally
 
 **Clone the project**
@@ -84,15 +83,16 @@ If you don't see the service name "demo", try refreshing the Roll the Dice app p
 
 It shows helpful details about what happened during a request, like which route was called, what method was used, or if any errors occurred.
 
-Together, it helps you understand the behavior of your app.
+Together, these `span attributes` help you understand the behavior of your app.
 
 **The `Process` section shows information about the app or service that created the trace.**
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/b17572ff-1ac3-4559-a997-e0ab1e382923" />
 
-It includes info about the machine it ran on, and the command used to start it. 
+This section consists of `resource attributes` that present info about the machine it ran on, and the command used to start it. 
 
-This helps you see where the request came from and which service handled it.
+It helps you see where the request came from and which service handled it.
+
 ## Auto-instrumentation
 
 In our setup, the following OTel packages have been installed:  
@@ -361,7 +361,7 @@ service:
       processors: [memory_limiter, resource, attributes, batch]
       exporters: [debug, otlp/jaeger]
 ```
-**`memory-limiter` processor prevents the Collector from using too much memory by slowing down or dropping data when needed.**
+**The `memory-limiter` processor prevents the Collector from using too much memory by slowing down or dropping data when needed.**
 ```
 processors:
   memory_limiter:
@@ -369,7 +369,7 @@ processors:
     limit_mib: 512
     spike_limit_mib: 128
 ```
-**`resource` processor modifies metadata about the service or host**
+**The `resource` processor modifies metadata about the service or host**
 ```
  resource:
     attributes:
@@ -439,7 +439,7 @@ This is done to reduce noise, improve privacy, and keep trace data focused.
   - process.owner
   - process.pid
   
-**`attributes` processor modifies, adds, or removes attributes on spans**
+**The `attributes` processor modifies, adds, or removes attributes on spans**
 
 ```
 attributes:
@@ -474,7 +474,7 @@ batch:
 ```
 It improves performance, reduces overhead, and handles brief exporter slowdown more gracefully.
 
-**Service pipelines were updated to include the processors that have been added.**
+**The Service pipelines were updated to include the processors that have been added.**
 ```
 service:
   pipelines:
@@ -504,13 +504,14 @@ The `batch` processor should be listed last to group the data into batches befor
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/c138b6d7-bce3-4691-b992-693a90bbeebe" />
 
 **Traces from the new OTel Collector configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/47821a54-25ea-4419-9708-b9a49641026a" />
+<img width="1910" alt="image" src="https://github.com/user-attachments/assets/4edc18b8-4008-4331-a5e8-3b0fe1a2706f" />
 
 **Traces from the original OTel Collector configuration:**
 <img width="1905" alt="image" src="https://github.com/user-attachments/assets/d54248b6-2dd8-4ff2-a4d5-515cdd8ad7fb" />
 
 **Traces from the new OTel Collector configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/f8e1f131-0c71-47e0-99bc-bef48343bb2f" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/6a90351e-c7f7-4c34-92cd-1dc8bc1115ef" />
+
 
 ## Resources
 - [OTel documentation](https://opentelemetry.io/docs/)

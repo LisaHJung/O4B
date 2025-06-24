@@ -449,7 +449,7 @@ This is done to reduce noise, improve privacy, and keep trace data focused.
 <img width="1905" alt="image" src="https://github.com/user-attachments/assets/d54248b6-2dd8-4ff2-a4d5-515cdd8ad7fb" />
 
 **Traces from the new OTel Collector configuration:**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/6a90351e-c7f7-4c34-92cd-1dc8bc1115ef" />
+<img width="1919" alt="image" src="https://github.com/user-attachments/assets/fac109ca-1ff3-4c8d-9df2-054c7bbf4fd5" />
 
 **The `attributes` processor modifies, adds, or removes attributes on spans**
 
@@ -490,7 +490,7 @@ batch:
     send_batch_size: 512
 
 ```
-It improves performance and educes overhead, and is recommended to be added to the collector as a best practice. 
+It improves performance and reduces overhead. This processor is recommended to be added to the collector configuration as a best practice. 
 
 **The Service pipelines were updated to include the processors that have been added.**
 ```
@@ -516,6 +516,9 @@ The `batch` processor should be listed last to group the data into batches befor
   - [OTel Collector](https://opentelemetry.io/docs/collector/)
     - [List of OTel Collector processors](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor) 
 - [OTel YouTube channel](https://www.youtube.com/@otel-official)
-  -[OTel for Beginners series](https://youtu.be/iEEIabOha8U?feature=shared) 
+  - [OTel for Beginners series - The JavaScript Journey](https://youtu.be/iEEIabOha8U?feature=shared)
+    - Stay tuned for videos on this talk + working with other telemetry types 
 
-## Repo QR Code:
+## QR code for project repo:
+
+## QR code for lightning talk 

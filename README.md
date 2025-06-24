@@ -239,7 +239,7 @@ exporters:
 - The `otlp/jaeger` exporter sends the telemetry data to a Jaeger backend at port 4317.
 
 
-**The`Service` component configure how data flows inside the Collector**
+**`Service` component configures how data flows inside the Collector**
 ```
 service:
   pipelines:

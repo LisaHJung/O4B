@@ -15,17 +15,17 @@ Note:
 ## Two project branches
 1. [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup)
 - Instruments the Roll the Dice app and sends trace data to the OTel Collector.
-- The Collector applies minimal processing (adds a service name) before forwarding the traces to Jaeger for storage and visualization.
+- The Collector forwards the traces to Jaeger for storage and visualization.
 2. [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) 
-- Uses the same setup as original-setup, but adds additional processors to the OTel Collector configuration.
-- These processors limit memory usage, enrich and clean up resource and attribute data, and batch traces for more efficient exporting.
+- Uses the same setup as original-setup, but applies processors to traces. 
+- These processors enrich and clean up resource and attribute data, and batch traces for more efficient exporting.
 
 ## Run the demo locally
 
 **Clone the project**
 ```
 //directory of your choice
-git clone https://github.com/LisaHJung/O4B.git
+git clone [update this]
 ```
 **Start the server**
 
@@ -62,7 +62,7 @@ You will be able to see the logs of traces that are flowing through the Collecto
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
 
-In the OTel config, we set our service name to "demo".
+In `package.json`, we set the environment variable "OTEL_SERVICE_NAME=demo".
 
 Select the service "demo" then click on the "Find Traces" button (blue arrow).
 
@@ -154,6 +154,32 @@ const sdk = new opentelemetry.NodeSDK({
 ```
 sdk.start();
 ```
+**IMPORTANT**
+
+- The instrumentation setup and configuration must be run before your application code. One tool commonly used for this task is the –require flag.
+- In a properly instrumented application, the servce name is set as an environment variable.
+- In this project, the app start script in package.json sets the OTEL_SERVICE_NAME environment variable and uses the -require flag to to run the instrumentation setup and configuration before the application code. 
+```
+{
+  "name": "latest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "OTEL_SERVICE_NAME=demo node --require ./instrumentation.js app.js"
+  },
+  "keywords": [],
+  "author": "",   
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@opentelemetry/auto-instrumentations-node": "^0.60.1",
+    "@opentelemetry/exporter-trace-otlp-grpc": "^0.202.0",
+    "@opentelemetry/sdk-node": "^0.202.0",
+    "express": "^5.1.0"
+  }
+}
+```
 ## OTel Collector configuration
 **otel/otel-collector-config.yaml**
 ```
@@ -164,13 +190,6 @@ receivers:
         endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
-
-processors:
-  resource:
-    attributes:
-      - key: service.name
-        value: demo
-        action: upsert
 
 exporters:
   debug:
@@ -185,14 +204,12 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [resource]
       exporters: [debug, otlp/jaeger]
 ```
-**Our OTel collector config consists of 4 components:**
+**Our OTel Collector configuration consists of 3 components:**
 1. Receivers
-2. Processors
-3. Exporters
-4. Service 
+2. Exporters
+3. Service 
 
 **`Receivers` tell the collector how to receive telemetry data**
 ```
@@ -207,18 +224,6 @@ receivers:
 ```
 - We set up the OTLP receiver to accept incoming telemetry data on two ports so it can receive data from our app.
   
-**Processors modify, filter, or enrich telemetry data before it gets exported**
-```
-processors:
-  resource:
-    attributes:
-      - key: service.name
-        value: demo
-        action: upsert
-```
-- The `resource` processor updates or inserts (`upsert`) the resource attribute `service.name = demo` in the telemetry data.
-- Adding a service name is especially useful when you have multiple services sending telemetry to your observability backend.
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
 
 **`Exporters` send data out to OTLP-compliant backends of your choice.**
 ```
@@ -239,25 +244,23 @@ exporters:
 - The `otlp/jaeger` exporter sends the telemetry data to a Jaeger backend at port 4317.
 
 
-**`Service` component configures how data flows inside the Collector**
+**The `Service` component configures how data flows inside the Collector**
 ```
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [resource]
       exporters: [debug, otlp/jaeger]
 ```
 - Our configuration defines a pipeline for traces.
 - The traces sent from the app is received by the `otlp` receiver we defined in the configuration.
-- The traces are processed by the `resource` processor, which adds the resource attribute `service.name = demo`.
 - The `debug` exporter logs traces to the terminal where the Collector is running.
 - The `otlp/jaeger` exporter forwards the trace data to Jaeger. 
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />
 
 
-## Add more processors to the OTel Collector config. 
+## Process telemetry data within the OTel Collector 
 
 **Switch to the [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch using your terminal**
 ```
@@ -270,7 +273,6 @@ git checkout post-processing
 CTRL + C
 docker compose up --build 
 ```
-
 **Refresh the Roll the Dice app page multiple times to send the traces to the newly configured OTel Collector**
 
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
@@ -280,9 +282,8 @@ docker compose up --build
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/e6dfa298-5721-49fb-abaa-8b0e89af651c" />
 
 ### New OTel collector configuration
-
-We added 4 additional processors to the original config:
-- `memory-limiter` 
+**Processors modify, filter, or enrich telemetry data before it gets exported**
+We added 3  processors to the original config:
 - `resource` 
 - `attributes` 
 - `batch` 
@@ -298,17 +299,9 @@ receivers:
         endpoint: 0.0.0.0:4318
 
 processors:
-  memory_limiter:
-    check_interval: 2s
-    limit_mib: 512
-    spike_limit_mib: 128
-
   resource:
     attributes:
-      - key: service.name
-        value: demo
-        action: upsert
-      - key: deployment.environment
+      - key: deployment.environment.name
         value: local
         action: insert
       - key: host.arch
@@ -334,9 +327,9 @@ processors:
         action: delete
       - key: net.host.ip
         action: delete
-      - key: net.host.port
-        action: delete
       - key: net.peer.ip
+        action: delete
+      - key: net.host.port
         action: delete
       - key: net.peer.port
         action: delete
@@ -358,28 +351,15 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [memory_limiter, resource, attributes, batch]
+      processors: [resource, attributes, batch]
       exporters: [debug, otlp/jaeger]
 ```
-**The `memory-limiter` processor prevents the Collector from using too much memory by slowing down or dropping data when needed.**
-```
-processors:
-  memory_limiter:
-    check_interval: 2s
-    limit_mib: 512
-    spike_limit_mib: 128
-```
-- Recommended to be added to the OTel Collector config as best practice.
-- The parameters should be adjusted to fit your use case.
 
 **The `resource` processor modifies metadata about the service or host.**
 ```
  resource:
     attributes:
-      - key: service.name
-        value: demo
-        action: upsert
-      - key: deployment.environment
+      - key: deployment.environment.name
         value: local
         action: insert
       - key: host.arch
@@ -400,8 +380,8 @@ processors:
         action: delete
 
 ```
-- `service.name` and `deployment.environment` resource attributes were added to the traces.
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/56bf7028-ef30-4948-ac48-b469f69429bd" />
+- `deployment.environment.name` resource attributes were added to the traces.
+
 <img width="1918" alt="image" src="https://github.com/user-attachments/assets/fc6bc5fd-77e7-448e-8030-ab427058d913" />
 
 ```

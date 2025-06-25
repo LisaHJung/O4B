@@ -22,7 +22,7 @@ Note:
 ## QR Code
 
 ## Run the demo locally
-Before getting started, make sure you install:
+**Before getting started, make sure you install:**
 - [Node.js](https://nodejs.org/en/download/) 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [Docker Compose](https://docs.docker.com/compose/install/)

@@ -58,7 +58,7 @@ You will be able to see the logs of traces that are flowing through the Collecto
 
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
-**Verify that Jaeger is receiving traces from the OTel Collector**
+**Verify that the OTel Collector is sending traces to the Jaeger backend**
 1. Go to the following URL (http://localhost:16686/) to access the Jaeger UI. 
 
 2. Click on the "Service" section (orange box) to view all the services that are sending traces to Jaeger.
@@ -159,7 +159,7 @@ sdk.start();
 ```
 **IMPORTANT**
 
-- The instrumentation setup and configuration must run before your application code. 
+- The instrumentation setup and configuration must run *before* your application code. 
   - One tool commonly used for this task is the –require flag.
 - In a properly instrumented application, the servce name is set as an environment variable.
 - To meet these requirements, we added the following app "start" script to `package.json`
@@ -489,7 +489,7 @@ service:
 
 **IMPORTANT**
 
-In the `service` section, the processors are applied sequentially in the order listed, so pay attention to the order! 
+In the `service` component, you must pay attention to the order in which the proccessors are listed as processors are applied sequentially in the order listed!
 
 The `batch` processor should be listed *last* to group the data into batches before exporting. 
 

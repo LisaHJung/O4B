@@ -50,7 +50,6 @@ docker compose up --build
 ```
 **Refresh the Roll the Dice app page multiple times to send traces to the OTel Collector**
 
-
 Take a look at the terminal that is running Docker.
 
 You will be able to see the logs of traces that are flowing through the Collector.
@@ -64,7 +63,7 @@ You will be able to see the logs of traces that are flowing through the Collecto
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/5cfc0b94-990c-4e8f-9ebc-c58b73f850b2" />
 
-In `package.json`, we set the environment variable "OTEL_SERVICE_NAME=demo".
+In our set up, the service name was set to "demo". 
 
 Select the service "demo" then click on the "Find Traces" button (blue arrow).
 
@@ -158,9 +157,10 @@ sdk.start();
 ```
 **IMPORTANT**
 
-- The instrumentation setup and configuration must be run before your application code. One tool commonly used for this task is the –require flag.
+- The instrumentation setup and configuration must run before your application code. 
+  - One tool commonly used for this task is the –require flag.
 - In a properly instrumented application, the servce name is set as an environment variable.
-- In this project, the app start script in package.json sets the OTEL_SERVICE_NAME environment variable and uses the -require flag to to run the instrumentation setup and configuration before the application code. 
+- To accomplish these tasks above, we added the following app "start" script to `package.json` 
 ```
 {
   "name": "latest",
@@ -255,14 +255,14 @@ service:
       exporters: [debug, otlp/jaeger]
 ```
 - Our configuration defines a pipeline for traces.
-- The traces sent from the app is received by the `otlp` receiver we defined in the configuration.
+- The traces sent from the app is received by the `otlp` receiver.
 - The `debug` exporter logs traces to the terminal where the Collector is running.
-- The `otlp/jaeger` exporter forwards the trace data to Jaeger. 
+- The `otlp/jaeger` exporter forwards traces to Jaeger. 
 
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />
 
 
-## Process telemetry data within the OTel Collector 
+## Process traces using the OTel Collector 
 
 **Switch to the [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch using your terminal**
 ```
@@ -280,12 +280,14 @@ docker compose up --build
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
 **Using the Jaeger UI, examine the traces to verify that they have been processed correctly.**
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/72ea707d-321d-42b7-89a3-4b11a4114ccd" />
-<img width="1920" alt="image" src="https://github.com/user-attachments/assets/e6dfa298-5721-49fb-abaa-8b0e89af651c" />
+<img width="1904" alt="image" src="https://github.com/user-attachments/assets/a56ee9af-5db1-4807-951f-262074042641" />
+
+<img width="1907" alt="image" src="https://github.com/user-attachments/assets/a00d6934-8079-4513-9ee9-eb687fbdb503" />
+
 
 ### New OTel collector configuration
-**Processors modify, filter, or enrich telemetry data before it gets exported**
-We added 3  processors to the original config:
+
+**Add 3 processors to the original OTel Collector configuration.** 
 - `resource` 
 - `attributes` 
 - `batch` 
@@ -356,10 +358,12 @@ service:
       processors: [resource, attributes, batch]
       exporters: [debug, otlp/jaeger]
 ```
+**Processors modify, filter, or enrich telemetry data within the Collector before the data gets exported**
 
 **The `resource` processor modifies metadata about the service or host.**
 ```
- resource:
+processors:
+  resource:
     attributes:
       - key: deployment.environment.name
         value: local
@@ -380,19 +384,16 @@ service:
         action: delete
       - key: process.pid
         action: delete
+```
+- `deployment.environment.name` resource attributes was added to the incoming traces.
+
+<img width="1916" alt="image" src="https://github.com/user-attachments/assets/836b9309-1d38-4826-8354-56be141de873" />
 
 ```
-- `deployment.environment.name` resource attributes were added to the traces.
-
-<img width="1918" alt="image" src="https://github.com/user-attachments/assets/fc6bc5fd-77e7-448e-8030-ab427058d913" />
-
-```
+processors:
   resource:
     attributes:
-      - key: service.name
-        value: demo
-        action: upsert
-      - key: deployment.environment
+      - key: deployment.environment.name
         value: local
         action: insert
       - key: host.arch
@@ -411,7 +412,6 @@ service:
         action: delete
       - key: process.pid
         action: delete
-
 ```
 The following resource attributes were deleted to remove sensitive or irrelevant data.
 This is done to reduce noise, improve privacy, and keep trace data focused.
@@ -424,11 +424,11 @@ This is done to reduce noise, improve privacy, and keep trace data focused.
   - process.owner
   - process.pid
 
-**Traces from the original OTel Collector configuration:**
+**Old traces from the original OTel Collector configuration:**
 <img width="1905" alt="image" src="https://github.com/user-attachments/assets/d54248b6-2dd8-4ff2-a4d5-515cdd8ad7fb" />
 
-**Traces from the new OTel Collector configuration:**
-<img width="1919" alt="image" src="https://github.com/user-attachments/assets/fac109ca-1ff3-4c8d-9df2-054c7bbf4fd5" />
+**New traces from the new OTel Collector configuration:**
+<img width="1918" alt="image" src="https://github.com/user-attachments/assets/48afa167-7563-4225-9600-e9ee6d8d0e35" />
 
 **The `attributes` processor modifies, adds, or removes attributes on spans.**
 
@@ -456,11 +456,11 @@ The following resource attributes were deleted to remove sensitive or personally
 
 Deleting them enhances privacy and security compliance and reduces the size of trace payloads.  
 
-**Traces from the original OTel Collector configuration:**
+**Old traces from the original OTel Collector configuration:**
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/c138b6d7-bce3-4691-b992-693a90bbeebe" />
 
-**Traces from the new OTel Collector configuration:**
-<img width="1910" alt="image" src="https://github.com/user-attachments/assets/4edc18b8-4008-4331-a5e8-3b0fe1a2706f" />
+**New traces from the new OTel Collector configuration:**
+<img width="1913" alt="image" src="https://github.com/user-attachments/assets/544f9c84-9f3c-48ff-ab45-9e34653065d8" />
 
 **The `batch` processor groups telemetry data into batches before exporting.**
 ```
@@ -477,7 +477,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [memory_limiter, resource, attributes, batch]
+      processors: [resource, attributes, batch]
       exporters: [debug, otlp/jaeger]
 ```
 

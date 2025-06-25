@@ -510,7 +510,7 @@ The `batch` processor should be listed *last* to group the data into batches bef
 - [OTel Slack channel](https://opentelemetry.io/community/end-user/slack-channel/)
 
 ## QR code for project repo:
-![image](https://github.com/user-attachments/assets/0ac2cc04-77aa-492e-8dfd-f582151df1ec)
+![undefined](https://github.com/user-attachments/assets/cd920546-e4e2-4b29-8001-7d72e4ef3da6)
 
 ## QR code for lightning talk 
 ![image](https://image-charts.com/chart?chs=300x300&cht=qr&choe=UTF-8&chl=https://sched.co/25vDo)

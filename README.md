@@ -468,7 +468,7 @@ batch:
     send_batch_size: 512
 
 ```
-It improves performance and reduces overhead. This processor is recommended to be added to the collector configuration as a best practice. 
+For best practice, add the `batch` processor to the Collector configuration. It improves performance and reduces overhead. 
 
 **The Service component was updated to include the processors that have been added.**
 ```
@@ -480,7 +480,7 @@ service:
       exporters: [debug, otlp/jaeger]
 ```
 
-**Note:**
+**IMPORTANT**
 In the `service` section, the processors are applied sequentially in the order listed, so pay attention to the order! 
 
 The `batch` processor should be listed *last* to group the data into batches before exporting. 
@@ -488,7 +488,9 @@ The `batch` processor should be listed *last* to group the data into batches bef
 
 ## Resources
 - [OTel documentation](https://opentelemetry.io/docs/)
-  - Ask AI (upper right corner of the OTel documentation)
+  - Ask AI 
+     <img width="1907" alt="image" src="https://github.com/user-attachments/assets/ed5378a8-c33d-4ed0-bddb-58142f76bc8f" />
+
   - [Language APIs and SDKs](https://opentelemetry.io/docs/languages/)
   - [Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/)
   - [OTel Collector](https://opentelemetry.io/docs/collector/)

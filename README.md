@@ -1,4 +1,4 @@
-# Demo architecture
+# Environment architecture
 <img width="1918" alt="image" src="https://github.com/user-attachments/assets/af320cc8-b7ac-4cca-8501-1b375f727df6" />
 
 ## Objectives 

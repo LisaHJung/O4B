@@ -26,7 +26,7 @@ Note:
 Before getting started, make sure you install:
 - [Docker](https://www.docker.com/products/docker-desktop/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
-- 
+  
 **Clone the project**
 ```
 //directory of your choice

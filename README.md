@@ -49,6 +49,8 @@ docker compose up --build
 ```
 **Refresh the Roll the Dice app page multiple times to send traces to the OTel Collector**
 
+![movie](https://github.com/user-attachments/assets/7ddea1df-87df-4817-88b1-1a35b1adfc2d)
+
 Take a look at the terminal that is running Docker.
 
 You will be able to see the logs of traces that are flowing through the Collector.

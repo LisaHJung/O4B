@@ -24,7 +24,7 @@ Note:
 ## Run the demo locally
 Before getting started, make sure you install:
 - [Node.js](https://nodejs.org/en/download/) 
-- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
   
 **Clone the project**

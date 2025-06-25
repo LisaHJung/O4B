@@ -162,7 +162,10 @@ sdk.start();
 - The instrumentation setup and configuration must run before your application code. 
   - One tool commonly used for this task is the –require flag.
 - In a properly instrumented application, the servce name is set as an environment variable.
-- To accomplish these two tasks, we added the following app "start" script to `package.json` 
+- To meet these requirements, we added the following app "start" script to `package.json`
+  
+**package.json**
+
 ```
 {
   "name": "latest",
@@ -281,7 +284,7 @@ docker compose up --build
 
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
-**Using the Jaeger UI, examine the traces to verify that they have been processed correctly.**
+**Using the Jaeger UI, examine the new traces to verify that they have been processed correctly.**
 <img width="1904" alt="image" src="https://github.com/user-attachments/assets/a56ee9af-5db1-4807-951f-262074042641" />
 
 <img width="1907" alt="image" src="https://github.com/user-attachments/assets/a00d6934-8079-4513-9ee9-eb687fbdb503" />
@@ -471,6 +474,8 @@ batch:
 
 ```
 For best practice, add the `batch` processor to the Collector configuration. It improves performance and reduces overhead. 
+
+Adjust the parameters to serve your use case. 
 
 **The Service component was updated to include the processors that have been added.**
 ```

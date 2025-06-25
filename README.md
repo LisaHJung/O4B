@@ -40,7 +40,7 @@ npm start
 In your browser, go to the following URL: http://localhost:8080/rolldice
 
 Refresh the page multiple times. This app will generate a random number from 1-6 just as if you were rolling a die. 
-https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34
+![Roll the dice mov](https://github.com/user-attachments/assets/79908390-adbc-4381-b81e-dffc67f0ea34)
 
 **Using Docker, run the OTel Collector and Jaeger**
 ```

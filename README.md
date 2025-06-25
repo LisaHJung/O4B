@@ -497,7 +497,8 @@ The `batch` processor should be listed *last* to group the data into batches bef
     - [List of OTel Collector processors](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor) 
 - [OTel YouTube channel](https://www.youtube.com/@otel-official)
   - [OTel for Beginners series - The JavaScript Journey](https://youtu.be/iEEIabOha8U?feature=shared)
-    - Stay tuned for videos on this talk + working with other telemetry types. 
+    - Stay tuned for videos on this talk + working with other telemetry types.
+- [OTel Slack channel](https://opentelemetry.io/community/end-user/slack-channel/)
 
 ## QR code for project repo:
 ![image](https://github.com/user-attachments/assets/0ac2cc04-77aa-492e-8dfd-f582151df1ec)

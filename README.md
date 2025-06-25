@@ -488,9 +488,7 @@ The `batch` processor should be listed *last* to group the data into batches bef
 
 ## Resources
 - [OTel documentation](https://opentelemetry.io/docs/)
-  - Ask AI 
-     <img width="1907" alt="image" src="https://github.com/user-attachments/assets/ed5378a8-c33d-4ed0-bddb-58142f76bc8f" />
-
+  - Ask AI (⌘+K)
   - [Language APIs and SDKs](https://opentelemetry.io/docs/languages/)
   - [Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/)
   - [OTel Collector](https://opentelemetry.io/docs/collector/)

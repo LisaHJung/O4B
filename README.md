@@ -27,7 +27,7 @@ Note:
 **Clone the project**
 ```
 //directory of your choice
-git clone [update this]
+git clone https://github.com/LisaHJung/Getting-started-with-OTel-in-15-minutes-.git
 ```
 **Start the server**
 

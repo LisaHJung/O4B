@@ -20,6 +20,8 @@ Note:
 - Uses the same setup as original-setup, but applies processors to traces. 
 - These processors enrich and clean up resource and attribute data, and batch traces for more efficient exporting.
 
+## QR Code
+
 ## Run the demo locally
 
 **Clone the project**
@@ -75,7 +77,7 @@ If you don't see the service name "demo", try refreshing the Roll the Dice app p
 4. Click on the root span (Get/rolldice span)
 <img width="1919" alt="image" src="https://github.com/user-attachments/assets/b5e437b8-2cda-4760-93b6-0cc8dcbdba7b" />
 
-5. Expand the tags and process sections to view the metadata about traces collected from the app
+5. Expand the `Tags` and `Process` sections to view the metadata about traces collected from the app
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/826578a3-6f3c-4a33-acfb-f76997eeb9ff" />
 
 **The `Tags` section shows details about what happened during a request.** 
@@ -140,7 +142,7 @@ const sdk = new opentelemetry.NodeSDK({
 });
 ```
 
-3. Configure the tracing system to automatically generate traces and export data to the local OTel Collector:
+3. Configure the tracing system to automatically generate traces and export traces to the local OTel Collector:
 
 ```
 const sdk = new opentelemetry.NodeSDK({
@@ -160,7 +162,7 @@ sdk.start();
 - The instrumentation setup and configuration must run before your application code. 
   - One tool commonly used for this task is the –require flag.
 - In a properly instrumented application, the servce name is set as an environment variable.
-- To accomplish these tasks above, we added the following app "start" script to `package.json` 
+- To accomplish these two tasks, we added the following app "start" script to `package.json` 
 ```
 {
   "name": "latest",
@@ -285,7 +287,7 @@ docker compose up --build
 <img width="1907" alt="image" src="https://github.com/user-attachments/assets/a00d6934-8079-4513-9ee9-eb687fbdb503" />
 
 
-### New OTel collector configuration
+### New OTel Collector configuration
 
 **Add 3 processors to the original OTel Collector configuration.** 
 - `resource` 
@@ -481,6 +483,7 @@ service:
 ```
 
 **IMPORTANT**
+
 In the `service` section, the processors are applied sequentially in the order listed, so pay attention to the order! 
 
 The `batch` processor should be listed *last* to group the data into batches before exporting. 

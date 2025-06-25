@@ -428,7 +428,7 @@ This is done to reduce noise, improve privacy, and keep trace data focused.
 <img width="1905" alt="image" src="https://github.com/user-attachments/assets/d54248b6-2dd8-4ff2-a4d5-515cdd8ad7fb" />
 
 **New traces from the new OTel Collector configuration:**
-<img width="1918" alt="image" src="https://github.com/user-attachments/assets/48afa167-7563-4225-9600-e9ee6d8d0e35" />
+<img width="1913" alt="image" src="https://github.com/user-attachments/assets/544f9c84-9f3c-48ff-ab45-9e34653065d8" />
 
 **The `attributes` processor modifies, adds, or removes attributes on spans.**
 
@@ -460,8 +460,7 @@ Deleting them enhances privacy and security compliance and reduces the size of t
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/c138b6d7-bce3-4691-b992-693a90bbeebe" />
 
 **New traces from the new OTel Collector configuration:**
-<img width="1913" alt="image" src="https://github.com/user-attachments/assets/544f9c84-9f3c-48ff-ab45-9e34653065d8" />
-
+<img width="1918" alt="image" src="https://github.com/user-attachments/assets/48afa167-7563-4225-9600-e9ee6d8d0e35" />
 **The `batch` processor groups telemetry data into batches before exporting.**
 ```
 batch:

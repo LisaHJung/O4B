@@ -13,7 +13,7 @@ Note:
 
 ## Two project branches
 1. [`original-setup`](https://github.com/LisaHJung/O4B/tree/original-setup)
-- Instruments the Roll the Dice app and sends trace data to the OTel Collector.
+- Instruments the Roll the Dice app and sends the traces to the OTel Collector.
 - The Collector forwards the traces to Jaeger for storage and visualization.
 2. [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) 
 - Uses the same setup as original-setup, but applies processors to traces. 
@@ -438,7 +438,7 @@ This is done to reduce noise, improve privacy, and keep trace data focused.
 **New traces from the new OTel Collector configuration:**
 <img width="1913" alt="image" src="https://github.com/user-attachments/assets/544f9c84-9f3c-48ff-ab45-9e34653065d8" />
 
-**The `attributes` processor modifies, adds, or removes attributes on spans.**
+**The `attributes` processor modifies, adds, or removes span attributes.**
 
 ```
 attributes:

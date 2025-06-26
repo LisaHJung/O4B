@@ -1,5 +1,5 @@
 # Environment architecture
-<img width="1918" alt="image" src="https://github.com/user-attachments/assets/af320cc8-b7ac-4cca-8501-1b375f727df6" />
+<img width="1906" alt="image" src="https://github.com/user-attachments/assets/71773bfa-e488-4e8f-92fd-d36468827a75" />
 
 ## Objectives 
 - Auto-instrument a Node.js app with OTel SDK to generate traces and send traces to the OTel Collector.

@@ -221,7 +221,7 @@ service:
 2. Exporters
 3. Service 
 
-**`Receivers` tell the collector how to receive telemetry data**
+**`Receivers` tell the Collector how to receive telemetry data**
 ```
 receivers:
   otlp:

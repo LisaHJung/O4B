@@ -72,12 +72,12 @@ In our set up, the service name was set to "demo".
 
 Select the service "demo" then click on the "Find Traces" button (blue arrow).
 
-If you don't see the service name "demo", try refreshing the Roll the Dice app page multiple times, and then refreshing the Jaeger UI page.
+If you don't see the service name "demo", try refreshing the Roll the Dice app page multiple times, verify that the OTel Collector is receiving telemetry by checking the OTel Collector logs (terminal running Docker), and then refreshing the Jaeger UI page.
 
 3. Click on one of the traces (orange box)
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/cf2e0018-c332-4c92-9ebf-9e88f86d8f6b" />
 
-4. Click on the root span (Get/rolldice span)
+4. Click on its root span (Get/rolldice span)
 <img width="1919" alt="image" src="https://github.com/user-attachments/assets/b5e437b8-2cda-4760-93b6-0cc8dcbdba7b" />
 
 5. Expand the `Tags` and `Process` sections to view the metadata about traces collected from the app
@@ -162,7 +162,7 @@ sdk.start();
 ```
 **IMPORTANT**
 
-- The instrumentation setup and configuration must run *before* your application code. 
+- The instrumentation setup and configuration must run **before** your application code. 
   - One tool commonly used for this task is the –require flag.
 - In a properly instrumented application, the servce name is set as an environment variable.
 - To meet these requirements, we added the following app "start" script to `package.json`
@@ -251,10 +251,10 @@ exporters:
   
  <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
  
-- The `otlp/jaeger` exporter sends the telemetry data to a Jaeger backend at port 4317.
+- The `otlp/jaeger` exporter sends the telemetry data to the Jaeger backend at port 4317.
 
 
-**The `Service` component configures how data flows inside the Collector**
+**The `Service` component configures how the data flows inside the Collector.**
 ```
 service:
   pipelines:
@@ -272,18 +272,18 @@ service:
 
 ## Process traces using the OTel Collector 
 
-**Switch to the [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch using your terminal**
+**Switch to the [`post-processing`](https://github.com/LisaHJung/O4B/tree/post-processing) branch using your terminal.**
 ```
 //in the directory of the project
 git checkout post-processing
 ``` 
-**Stop and restart the OTel Collector and Jaeger**
+**Stop and restart the OTel Collector and Jaeger.**
 ```
 //in the project directory
 CTRL + C
 docker compose up --build 
 ```
-**Refresh the Roll the Dice app page multiple times to send the traces to the newly configured OTel Collector**
+**Refresh the Roll the Dice app page multiple times to send the traces to the newly configured OTel Collector.**
 
 <img width="1040" alt="image" src="https://github.com/user-attachments/assets/36081b69-8d28-4e16-9afa-86957759fc90" />
 
@@ -436,7 +436,7 @@ This is done to reduce noise, improve privacy, and keep trace data focused.
 <img width="1905" alt="image" src="https://github.com/user-attachments/assets/d54248b6-2dd8-4ff2-a4d5-515cdd8ad7fb" />
 
 **New traces from the new OTel Collector configuration:**
-<img width="1913" alt="image" src="https://github.com/user-attachments/assets/544f9c84-9f3c-48ff-ab45-9e34653065d8" />
+<img width="1916" alt="image" src="https://github.com/user-attachments/assets/a0da2cef-e183-42d9-9520-4fb9b4b46f4b" />
 
 **The `attributes` processor modifies, adds, or removes span attributes.**
 
@@ -468,7 +468,8 @@ Deleting them enhances privacy and security compliance and reduces the size of t
 <img width="1920" alt="image" src="https://github.com/user-attachments/assets/c138b6d7-bce3-4691-b992-693a90bbeebe" />
 
 **New traces from the new OTel Collector configuration:**
-<img width="1918" alt="image" src="https://github.com/user-attachments/assets/48afa167-7563-4225-9600-e9ee6d8d0e35" />
+<img width="1920" alt="image" src="https://github.com/user-attachments/assets/485c084c-4144-4b24-895b-d6b27a228f18" />
+
 **The `batch` processor groups telemetry data into batches before exporting.**
 ```
 batch:
@@ -476,7 +477,7 @@ batch:
     send_batch_size: 512
 
 ```
-For best practice, add the `batch` processor to the Collector configuration. It improves performance and reduces overhead. 
+For best practice, add the `batch` processor to the Collector configuration to improve performance and reduce overhead. 
 
 Adjust the parameters to serve your use case. 
 
@@ -492,9 +493,9 @@ service:
 
 **IMPORTANT**
 
-In the `service` component, you must pay attention to the order in which the proccessors are listed as processors are applied sequentially in the order listed!
+In the `service` component, you must pay attention to the order in which the proccessors are listed as processors are applied sequentially!
 
-The `batch` processor should be listed *last* to group the data into batches before exporting. 
+The `batch` processor should be listed **last** to group the data into batches before exporting. 
 
 
 ## Resources
